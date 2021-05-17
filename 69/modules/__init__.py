@@ -3,7 +3,7 @@ import importlib
 import sys
 from os.path import basename, dirname, isfile
 
-from wbb import MOD_LOAD, MOD_NOLOAD
+from 69 import MOD_LOAD, MOD_NOLOAD
 
 
 def __list_all_modules():
@@ -39,6 +39,6 @@ def __list_all_modules():
     return all_modules
 
 
-importlib.import_module("wbb.modules.__main__")
+importlib.import_module("69.modules.__main__")
 ALL_MODULES = sorted(__list_all_modules())
 __all__ = ALL_MODULES + ["ALL_MODULES"]
