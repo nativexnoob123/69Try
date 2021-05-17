@@ -8,3 +8,8 @@ __HELP__ = "•Anime uwu•\n\n/anime - search anime on AniList\n /manga - searc
 @app.on_message(filters.command("start"))
 async def start(_, message):
     await message.reply_text("Hi Vro")
+    
+    
+@app.on_message(filters.sticker)
+async def start(_, message):
+    await message.reply_text("Hi Vro")
