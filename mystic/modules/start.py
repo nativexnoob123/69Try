@@ -16,17 +16,17 @@ async def start(_, message):
     await message.reply_text(f"{message.message_id}")
     user_id = message.from_user.id
     queue = que.get(message.from_user.id)
-        if not queue:
-            que[user_id] = []
-            qeue = que.get(message.from_user.id)
-            mid = message.message_id            
-            appendable = [mid]      
-            qeue.append(appendable)
-        else:    
-            qeue = que.get(message.from_user.id)
-            mid = message.message_id 
-            appendable = [mid]
-            qeue.append(appendable)  
+    if not queue:
+        que[user_id] = []
+        qeue = que.get(message.from_user.id)
+        mid = message.message_id            
+        appendable = [mid]      
+        qeue.append(appendable)
+    else:    
+        qeue = que.get(message.from_user.id)
+        mid = message.message_id 
+        appendable = [mid]
+        qeue.append(appendable)  
        
     
     
