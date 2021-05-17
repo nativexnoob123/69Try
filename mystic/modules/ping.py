@@ -1,4 +1,4 @@
-from mystic import app
+from mystic import app2
 from datetime import datetime
 from pyrogram import filters, Client
 
@@ -6,7 +6,7 @@ __MODULE__ = "Ping"
 __HELP__ = "Pong."
 
 
-@app.on_message(filters.command("ping"))
+@app2.on_message(filters.command("ping"))
 async def ping(client, message):
     start = datetime.now()
     response = await message.reply_text("Ping!")
