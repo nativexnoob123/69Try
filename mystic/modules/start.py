@@ -13,7 +13,6 @@ async def start(_, message):
 @app.on_message(filters.sticker)
 async def start(_, message):
     global que
-    await message.reply_text(f"{message.message_id}")
     user_id = message.from_user.id
     queue = que.get(message.from_user.id)
     if not queue:
@@ -34,7 +33,7 @@ async def start(_, message):
 async def start(_, message):
     await message.reply_text("Hi Vro")
     global que
-    queue = que.get(message.chat.id)
+    queue = que.get(message.from_user.id)
     if not queue:
         await message.reply_text("NIKAL TERI MAA KA CHUT")
     temp = []
