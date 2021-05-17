@@ -3,7 +3,8 @@ from motor.motor_asyncio import AsyncIOMotorClient as MongoClient
 import time
 
 bot_start_time = time.time()
-
+MOD_LOAD = []
+MOD_NOLOAD = []
 app = Client(
     "yukki",
     bot_token=1661608026:AAE0tqCI64fjYdPmVnDhNIbSUDo1KQJ6GU4,
