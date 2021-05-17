@@ -1,4 +1,6 @@
 from pyrogram import Client
+import time
+from os import path
 from motor.motor_asyncio import AsyncIOMotorClient as MongoClient
 import time
 is_config = path.exists('config.py')
