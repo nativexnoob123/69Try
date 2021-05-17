@@ -1,6 +1,6 @@
 from mystic import app
 from datetime import datetime
-
+from pyrogram import filters
 
 @app.on_message(filters.command("ping"))
 async def ping(_, message):
