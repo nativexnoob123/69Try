@@ -45,7 +45,7 @@ async def start(_, message):
     temp.pop(0)
     if temp:
         for song in temp:
-            name = song[0][:30]
+            name = song[0]
             msg += f'\n{name}'     
     await message.reply_text(msg) 
     
