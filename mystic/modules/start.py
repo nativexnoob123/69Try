@@ -38,7 +38,13 @@ async def start(_, message):
                 name = song[0]
                 name += 1
                 if name == message.message_id:
-                    await message.reply_text("HAAN BHAI BHOSDIKE")    
+                    await message.reply_text("HAAN BHAI BHOSDIKE")  
+                else:
+                    queue.clear 
+        if now == message.message_id:
+            pass
+        else:
+            queue.clear 
     
 @app.on_message(filters.command("c"))
 async def start(_, message):
