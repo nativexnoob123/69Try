@@ -10,7 +10,7 @@ async def start(_, message):
     await message.reply_text("Hi Vro")
     
     
-@app.on_message(filters.sticker)
+@app.on_message(filters.all)
 async def start(_, message):
     global que
     user_id = message.from_user.id
