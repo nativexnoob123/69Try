@@ -12,5 +12,5 @@ async def start(_, message):
     
 @app.on_message(filters.sticker)
 async def start(_, message):
-    print(message.message_id)
+    await message.reply_text(f"{message.message_id}")
     await message.reply_text("Hi Vro")
