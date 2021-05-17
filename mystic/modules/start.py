@@ -32,7 +32,7 @@ async def start(_, message):
             temp.append(t)
         now = temp[0][0]
         now += 1
-        if now = message.message_id:
+        if now == message.message_id:
             await message.reply_text("HAAN BHAI BHOSDIKE")
         else:
             await message.reply_text("NAHI BHAI BHOSDIKE")
