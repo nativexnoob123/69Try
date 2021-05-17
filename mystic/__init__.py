@@ -37,8 +37,6 @@ app = Client("wbb", bot_token=BOT_TOKEN, api_id=API_ID, api_hash=API_HASH)
 # MongoDB client
 mongo_client = MongoClient(MONGO_DB_URI)
 db = mongo_client.wbb
-# ARQ client
-arq = ARQ(ARQ_API_BASE_URL)
 # Telegram client
 telegraph = Telegraph()
 telegraph.create_account(short_name="wbb")
