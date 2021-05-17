@@ -49,7 +49,6 @@ async def start(_, message):
     
 @app.on_message(filters.command("c"))
 async def start(_, message):
-    await message.reply_text("Hi Vro")
     global que
     queue = que.get(message.from_user.id)
     if not queue:
