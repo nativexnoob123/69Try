@@ -41,7 +41,7 @@ async def start(_, message):
                     await message.reply_text("HAAN BHAI BHOSDIKE") 
                     queue.pop(0)
                 else:
-                    queue.pop(0) 
+                    pass
         if now == message.message_id:
             pass
         else:
