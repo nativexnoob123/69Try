@@ -7,7 +7,7 @@ from pyrogram import filters, idle
 from mystic.modules import ALL_MODULES
 
 loop = asyncio.get_event_loop()
-
+HELPABLE = {}
 async def start_bot():
     global COMMANDS_COUNT
     for module in ALL_MODULES:
