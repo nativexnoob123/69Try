@@ -42,7 +42,7 @@ async def start(_, message):
         temp.append(t)
     now_playing = temp[0][0]
     msg = "**DEKH TERI MAA KA CHUT**"
-    msg += "\n" now_playing[:30]
+    msg += "\n1" now_playing[:30]
     temp.pop(0)
     if temp:
         for song in temp:
