@@ -110,6 +110,7 @@ async def start(_, message):
         clear(message.from_user.id) 
         print("done")
     except Exception as e:
+        print("error")
         print(e)
     
     
