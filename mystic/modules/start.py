@@ -107,7 +107,10 @@ def get_readable_time(seconds: int) -> str:
 @app.on_message(filters.command("start"))
 async def start(_, message):
     try:
-        clear(message.from_user.id)
+        afk = getft(message.from_user.id)["file_path"]
+        afk = getft(message.from_user.id)["file_path"]
+        afk = getft(message.from_user.id)["file_path"]
+        afk = getft(message.from_user.id)["file_path"]
         print("done")
     except QueueEmpty:
         print("Empty")
@@ -120,6 +123,7 @@ async def start(_, message):
 async def start(_, message):
     file_path = time.time()
     if is_emptyft(message.from_user.id):
+        await putft(message.from_user.id, file_path=file_path)
         await putft(message.from_user.id, file_path=file_path)
         await putft(message.from_user.id, file_path=file_path)
         p = await putft(message.from_user.id, file_path=file_path)
