@@ -1,69 +1,89 @@
 from mystic import app
 from pyrogram import filters
-que = {}
+import time
+from asyncio import Queue, QueueEmpty as Empty
+from typing import Dict, Union
+
+
 __MODULE__ = "Start"
 __HELP__ = "•Anime uwu•\n\n/anime - search anime on AniList\n /manga - search manga on Anilist\n /char - search character on Anilist\n /nhentai ID - returns the nhentai in telegraph instant preview format."
 
 
+
+queues: Dict[int, Queue] = {}
+
+
+async def put(chat_id: int, **kwargs) -> int:
+    if chat_id not in queues:
+        queues[chat_id] = Queue()
+    await queues[chat_id].put({**kwargs})
+    return queues[chat_id].qsize()
+
+
+def get(chat_id: int) -> Union[Dict[str, str], None]:
+    if chat_id in queues:
+        try:
+            return queues[chat_id].get_nowait()
+        except Empty:
+            return None
+
+
+def is_empty(chat_id: int) -> bool:
+    if chat_id in queues:
+        return queues[chat_id].empty()
+    return True
+
+
+def task_done(chat_id: int):
+    if chat_id in queues:
+        try:
+            queues[chat_id].task_done()
+        except ValueError:
+            pass
+
+
+def clear(chat_id: int):
+    if chat_id in queues:
+        if queues[chat_id].empty():
+            raise Empty
+        else:
+            queues[chat_id].queue = []
+    raise Empty
+    
+def get_readable_time(seconds: int) -> str:
+    count = 0
+    ping_time = ""
+    time_list = []
+    time_suffix_list = ["s", "m", "h", "days"]
+    while count < 4:
+        count += 1
+        if count < 3:
+            remainder, result = divmod(seconds, 60)
+        else:
+            remainder, result = divmod(seconds, 24)
+        if seconds == 0 and remainder == 0:
+            break
+        time_list.append(int(result))
+        seconds = int(remainder)
+    for i in range(len(time_list)):
+        time_list[i] = str(time_list[i]) + time_suffix_list[i]
+    if len(time_list) == 4:
+        ping_time += time_list.pop() + ", "
+    time_list.reverse()
+    ping_time += ":".join(time_list)
+    return ping_time
+    
 @app.on_message(filters.command("start"))
 async def start(_, message):
     await message.reply_text("Hi Vro")
     
     
-@app.on_message(filters.media)
+@app.on_message(filters.command("play"))
 async def start(_, message):
-    global que
-    user_id = message.from_user.id
-    queue = que.get(message.from_user.id)
-    if not queue:
-        que[user_id] = []
-        qeue = que.get(message.from_user.id)
-        mid = message.message_id            
-        appendable = [mid]      
-        qeue.append(appendable)
-    else:    
-        qeue = que.get(message.from_user.id)
-        mid = message.message_id 
-        appendable = [mid]
-        qeue.append(appendable)  
-        queue = que.get(message.from_user.id)
-        temp = []
-        for t in queue:
-            temp.append(t)
-        now = temp[0][0]
-        now += 1
-        temp.pop(0)
-        if temp:
-            for song in temp:
-                name = song[0]
-                name += 1
-                if name == message.message_id:
-                    await message.reply_text("HAAN BHAI BHOSDIKE") 
-                    queue.pop(0)
-                else:
-                    pass
-        if now == message.message_id:
-            pass
-        else:
-            queue.pop(0) 
-    
-@app.on_message(filters.command("c"))
-async def start(_, message):
-    global que
-    queue = que.get(message.from_user.id)
-    if not queue:
-        await message.reply_text("NIKAL TERI MAA KA CHUT")
-    temp = []
-    for t in queue:
-        temp.append(t)
-    now = temp[0][0]
-    msg = "**DEKH TERI MAA KA CHUT**"
-    msg += f'\n{now}' 
-    temp.pop(0)
-    if temp:
-        for song in temp:
-            name = song[0]
-            msg += f'\n{name}'     
-    await message.reply_text(msg) 
-    
+    file_ = time.time()
+    file_path =  {formatter.get_readable_time((file_))}
+    position = await queues.put(message.from_user.id, file_path=file_path)
+    if position = 1:
+        afk = queues.get(chat_id)["file_path"]
+        print(afk)
    
