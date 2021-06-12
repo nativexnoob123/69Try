@@ -83,9 +83,11 @@ async def start(_, message):
 async def start(_, message):
     file_path = time.time()
     position = await put(message.from_user.id, file_path=file_path)
+    print(position)
     await asyncio.sleep(5)
     if position == 1:
         afk = get(message.from_user.id)["file_path"]
+        
         bot_uptime = int(time.time() - afk)
         file_1 =  f"{get_readable_time((bot_uptime))}"
         print(file_1)
