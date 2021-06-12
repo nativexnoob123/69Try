@@ -154,4 +154,3 @@ async def start(_, message):
             afk = get(message.from_user.id)["file_path"]
             afk = get(message.from_user.id)["file_path"]
             afk = get(message.from_user.id)["file_path"]
-            print(file_1)  
