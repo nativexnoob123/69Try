@@ -107,7 +107,9 @@ def get_readable_time(seconds: int) -> str:
 @app.on_message(filters.command("start"))
 async def start(_, message):
     try:
-        task_done(message.from_user.id)
+        task_doneft(message.from_user.id)
+        task_doneft(message.from_user.id)
+        task_doneft(message.from_user.id)
         print("done")
     except Exception as e:
         print("error")
@@ -117,71 +119,79 @@ async def start(_, message):
 @app.on_message(filters.command("play"))
 async def start(_, message):
     file_path = time.time()
-    if getft(message.from_user.id):
-        position = await put(message.from_user.id, file_path=file_path)
-        if position == 1:
-            afk = getft(message.from_user.id)["file_path"]
-            bot_uptime = int(time.time() - afk)
-            file_1 =  f"{get_readable_time((bot_uptime))}"
-            if (file_1.isnumeric()) == False:
-                print("Position 1")
-                task_done(message.from_user.id)
-                task_doneft(message.from_user.id)
-            print(file_1)
-        if position == 2:
-            afk = getft(message.from_user.id)["file_path"]
-            bot_uptime = int(time.time() - afk)
-            file_1 =  f"{get_readable_time((bot_uptime))}"
-            if (file_1.isnumeric()) == False:
-                print("Position 2")
-                try:
-                    clear(message.from_user.id)  
-                except Empty:
-                    pass
-                try:
-                    clearft(message.from_user.id)  
-                except Empty:
-                    pass
-            print(file_1)  
-        if position == 3:
-            afk = getft(message.from_user.id)["file_path"]
-            bot_uptime = int(time.time() - afk)
-            file_1 =  f"{get_readable_time((bot_uptime))}"
-            if (file_1.isnumeric()) == False:
-                print("Position 3")
-                try:
-                    clear(message.from_user.id)  
-                except Empty:
-                    pass
-                try:
-                    clearft(message.from_user.id)  
-                except Empty:
-                    pass
-            print(file_1)
-        if position == 4:
-            await message.reply_text("Too Fast Blocked")
-    else:
-        print("Not Found")
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
+    if is_emptyft(message.from_user.id):
         await putft(message.from_user.id, file_path=file_path)
         await putft(message.from_user.id, file_path=file_path)
         p = await putft(message.from_user.id, file_path=file_path)
         print(p)
+    else:    
+        position = await put(message.from_user.id, file_path=file_path)
+        if position == 1:
+            print("Position 1 Check")
+            afk = getft(message.from_user.id)["file_path"]
+            bot_uptime = int(time.time() - afk)
+            file_1 =  f"{get_readable_time((bot_uptime))}"
+            if (file_1.isnumeric()) == False:
+                print("Position 1 Blocked")
+                task_done(message.from_user.id)
+                task_doneft(message.from_user.id)
+                task_doneft(message.from_user.id)
+                task_doneft(message.from_user.id)
+            print(file_1)
+        if position == 2:
+            print("Position 1 Check")
+            afk = getft(message.from_user.id)["file_path"]
+            bot_uptime = int(time.time() - afk)
+            file_1 =  f"{get_readable_time((bot_uptime))}"
+            if (file_1.isnumeric()) == False:
+                print("Position 2 Blocked")
+                task_done(message.from_user.id)
+                task_done(message.from_user.id)
+                task_doneft(message.from_user.id)
+                task_doneft(message.from_user.id)
+                task_doneft(message.from_user.id)
+            print(file_1)  
+        if position == 3:
+            print("Position 1 Check")
+            afk = getft(message.from_user.id)["file_path"]
+            bot_uptime = int(time.time() - afk)
+            file_1 =  f"{get_readable_time((bot_uptime))}"
+            if (file_1.isnumeric()) == False:
+                print("Position 3 Blocked")
+                task_done(message.from_user.id)
+                task_done(message.from_user.id)
+                task_done(message.from_user.id)
+                task_doneft(message.from_user.id)
+                task_doneft(message.from_user.id)
+                task_doneft(message.from_user.id)
+            print(file_1)
+        if position == 4:
+            task_done(message.from_user.id)
+            task_done(message.from_user.id)
+            task_done(message.from_user.id)
+            task_done(message.from_user.id)
+            task_doneft(message.from_user.id)
+            task_doneft(message.from_user.id)
+            task_doneft(message.from_user.id)
+            print("Position 1 Check")
+            await message.reply_text("Too Fast Blocked")
+    else:
+
+        await putft(message.from_user.id, file_path=file_path)
+        await putft(message.from_user.id, file_path=file_path)
+        await putft(message.from_user.id, file_path=file_path)
+        await putft(message.from_user.id, file_path=file_path)
+        await putft(message.from_user.id, file_path=file_path)
+        await putft(message.from_user.id, file_path=file_path)
+        await putft(message.from_user.id, file_path=file_path)
+        await putft(message.from_user.id, file_path=file_path)
+        await putft(message.from_user.id, file_path=file_path)
+        await putft(message.from_user.id, file_path=file_path)
+        await putft(message.from_user.id, file_path=file_path)
+        await putft(message.from_user.id, file_path=file_path)
+        await putft(message.from_user.id, file_path=file_path)
+        await putft(message.from_user.id, file_path=file_path)
+        await putft(message.from_user.id, file_path=file_path)
+        
         
    
