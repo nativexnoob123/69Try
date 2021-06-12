@@ -81,13 +81,18 @@ async def start(_, message):
     
 @app.on_message(filters.command("play"))
 async def start(_, message):
-    file_path = time.time()
+    if await get(message.from_user.id):
+        print("OK")
+    else:
+        print("Not forund")
+    return    
+    file_path = timse.time()
     position = await put(message.from_user.id, file_path=file_path)
     print(position)
     await asyncio.sleep(5)
     if position == 1:
         afk = get(message.from_user.id)["file_path"]
-        
+        await queues[chat_id].pop(0)
         bot_uptime = int(time.time() - afk)
         file_1 =  f"{get_readable_time((bot_uptime))}"
         print(file_1)
