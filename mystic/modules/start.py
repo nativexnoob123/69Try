@@ -81,7 +81,7 @@ async def start(_, message):
     
 @app.on_message(filters.command("play"))
 async def start(_, message):
-    if await get(message.from_user.id):
+    if get(message.from_user.id):
         print("OK")
     else:
         print("Not forund")
