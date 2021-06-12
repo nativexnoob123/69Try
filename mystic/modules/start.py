@@ -121,11 +121,11 @@ async def start(_, message):
             if (file_1.isnumeric()) == False:
                 print("Position 1")
                 try:
-                    clear(message.chat.id)  
+                    clear(message.from_user.id)  
                 except Empty:
                     pass
                 try:
-                    clearft(message.chat.id)  
+                    clearft(message.from_user.id)  
                 except Empty:
                     pass
             print(file_1)
@@ -136,11 +136,11 @@ async def start(_, message):
             if (file_1.isnumeric()) == False:
                 print("Position 2")
                 try:
-                    clear(message.chat.id)  
+                    clear(message.from_user.id)  
                 except Empty:
                     pass
                 try:
-                    clearft(message.chat.id)  
+                    clearft(message.from_user.id)  
                 except Empty:
                     pass
             print(file_1)  
@@ -151,11 +151,11 @@ async def start(_, message):
             if (file_1.isnumeric()) == False:
                 print("Position 3")
                 try:
-                    clear(message.chat.id)  
+                    clear(message.from_user.id)  
                 except Empty:
                     pass
                 try:
-                    clearft(message.chat.id)  
+                    clearft(message.from_user.id)  
                 except Empty:
                     pass
             print(file_1)
