@@ -12,13 +12,19 @@ __HELP__ = "•Anime uwu•\n\n/anime - search anime on AniList\n /manga - searc
 
 
 queues: Dict[int, Queue] = {}
-
+ft: Dict[int, Queue] = {}
 
 async def put(chat_id: int, **kwargs) -> int:
     if chat_id not in queues:
         queues[chat_id] = Queue()
     await queues[chat_id].put({**kwargs})
     return queues[chat_id].qsize()
+
+async def putft(chat_id: int, **kwargs) -> int:
+    if chat_id not in ft:
+        ft[chat_id] = Queue()
+    await ft[chat_id].put({**kwargs})
+    return ft[chat_id].qsize()
 
 
 def get(chat_id: int) -> Union[Dict[str, str], None]:
@@ -28,12 +34,22 @@ def get(chat_id: int) -> Union[Dict[str, str], None]:
         except Empty:
             return None
 
+def getft(chat_id: int) -> Union[Dict[str, str], None]:
+    if chat_id in ft:
+        try:
+            return ft[chat_id].get_nowait()
+        except Empty:
+            return None
 
 def is_empty(chat_id: int) -> bool:
     if chat_id in queues:
         return queues[chat_id].empty()
     return True
 
+def is_emptyft(chat_id: int) -> bool:
+    if chat_id in ft:
+        return ft[chat_id].empty()
+    return True
 
 def task_done(chat_id: int):
     if chat_id in queues:
@@ -41,7 +57,13 @@ def task_done(chat_id: int):
             queues[chat_id].task_done()
         except ValueError:
             pass
-
+        
+def task_doneft(chat_id: int):
+    if chat_id in ft:
+        try:
+            ft[chat_id].task_done()
+        except ValueError:
+            pass
 
 def clear(chat_id: int):
     if chat_id in queues:
@@ -50,12 +72,20 @@ def clear(chat_id: int):
         else:
             queues[chat_id].queue = []
     raise Empty
+ 
+def clearft(chat_id: int):
+    if chat_id in ft:
+        if ft[chat_id].empty():
+            raise Empty
+        else:
+            ft[chat_id].queue = []
+    raise Empty
     
 def get_readable_time(seconds: int) -> str:
     count = 0
     ping_time = ""
     time_list = []
-    time_suffix_list = ["", "", "", ""]
+    time_suffix_list = ["s", "m", "h", "days"]
     while count < 4:
         count += 1
         if count < 3:
@@ -81,24 +111,27 @@ async def start(_, message):
     
 @app.on_message(filters.command("play"))
 async def start(_, message):
-    if get(message.from_user.id):
-        print("OK")
+    file_path = time.time()
+    if getft(message.from_user.id):
+        position = await put(message.from_user.id, file_path=file_path)
+        if position == 1:
+            afk = getft(message.from_user.id)["file_path"]
+            bot_uptime = int(time.time() - afk)
+            file_1 =  f"{get_readable_time((bot_uptime))}"
+            print(file_1)
+        if position == 2:
+            afk = getft(message.from_user.id)["file_path"]
+            bot_uptime = int(time.time() - afk)
+            file_1 =  f"{get_readable_time((bot_uptime))}"
+            print(file_1)  
+        if position == 3:
+            afk = getft(message.from_user.id)["file_path"]
+            bot_uptime = int(time.time() - afk)
+            file_1 =  f"{get_readable_time((bot_uptime))}"
+            print(file_1)
+        if position == 4:
+            await message.reply_text("Too Fast Block")    
     else:
-        print("Not forund")
-    return    
-    file_path = timse.time()
-    position = await put(message.from_user.id, file_path=file_path)
-    print(position)
-    await asyncio.sleep(5)
-    if position == 1:
-        afk = get(message.from_user.id)["file_path"]
-        await queues[chat_id].pop(0)
-        bot_uptime = int(time.time() - afk)
-        file_1 =  f"{get_readable_time((bot_uptime))}"
-        print(file_1)
-    if position == 2:
-        afk = get(message.from_user.id)["file_path"]
-        bot_uptime = int(time.time() - afk)
-        file_1 =  f"{get_readable_time((bot_uptime))}"
-        print(file_1)   
+        print("Not Found")
+        await putft(message.from_user.id, file_path=file_path)
    
