@@ -84,6 +84,6 @@ async def start(_, message):
     file_path =  f"{get_readable_time((file_))}"
     position = await put(message.from_user.id, file_path=file_path)
     if position == 1:
-        afk = get(chat_id)["file_path"]
+        afk = get(message.from_user.id)["file_path"]
         print(afk)
    
