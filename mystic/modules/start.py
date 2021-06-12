@@ -2,7 +2,7 @@ from mystic import app
 from pyrogram import filters
 import time
 import asyncio
-from asyncio import Queue, QueueEmpty as Empty
+from asyncio import Queue, QueueEmpty
 from typing import Dict, Union
 
 
