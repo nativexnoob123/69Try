@@ -107,7 +107,7 @@ def get_readable_time(seconds: int) -> str:
 @app.on_message(filters.command("start"))
 async def start(_, message):
     try:
-        clear(message.from_user.id) 
+        task_done(message.from_user.id)
         print("done")
     except Exception as e:
         print("error")
@@ -125,14 +125,8 @@ async def start(_, message):
             file_1 =  f"{get_readable_time((bot_uptime))}"
             if (file_1.isnumeric()) == False:
                 print("Position 1")
-                try:
-                    clear(message.from_user.id)  
-                except Empty:
-                    pass
-                try:
-                    clearft(message.from_user.id)  
-                except Empty:
-                    pass
+                task_done(message.from_user.id)
+                task_doneft(message.from_user.id)
             print(file_1)
         if position == 2:
             afk = getft(message.from_user.id)["file_path"]
