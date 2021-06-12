@@ -2,7 +2,7 @@ from mystic import app
 from pyrogram import filters
 import time
 import asyncio
-from asyncio import Queue, QueueEmpty
+from asyncio import Queue, QueueEmpty as Empty
 from typing import Dict, Union
 
 
@@ -122,11 +122,11 @@ async def start(_, message):
                 print("Position 1")
                 try:
                     clear(message.chat.id)  
-                except QueueEmpty:
+                except Empty:
                     pass
                 try:
                     clearft(message.chat.id)  
-                except QueueEmpty:
+                except Empty:
                     pass
             print(file_1)
         if position == 2:
@@ -137,11 +137,11 @@ async def start(_, message):
                 print("Position 2")
                 try:
                     clear(message.chat.id)  
-                except QueueEmpty:
+                except Empty:
                     pass
                 try:
                     clearft(message.chat.id)  
-                except QueueEmpty:
+                except Empty:
                     pass
             print(file_1)  
         if position == 3:
@@ -152,11 +152,11 @@ async def start(_, message):
                 print("Position 3")
                 try:
                     clear(message.chat.id)  
-                except QueueEmpty:
+                except Empty:
                     pass
                 try:
                     clearft(message.chat.id)  
-                except QueueEmpty:
+                except Empty:
                     pass
             print(file_1)
         if position == 4:
