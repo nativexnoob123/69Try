@@ -81,7 +81,7 @@ async def start(_, message):
 @app.on_message(filters.command("play"))
 async def start(_, message):
     file_ = time.time()
-    file_path =  {formatter.get_readable_time((file_))}
+    file_path =  f"{get_readable_time((file_))}"
     position = await queues.put(message.from_user.id, file_path=file_path)
     if position == 1:
         afk = queues.get(chat_id)["file_path"]
