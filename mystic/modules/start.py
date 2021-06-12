@@ -1,6 +1,7 @@
 from mystic import app
 from pyrogram import filters
 import time
+import asyncio
 from asyncio import Queue, QueueEmpty as Empty
 from typing import Dict, Union
 
@@ -82,6 +83,7 @@ async def start(_, message):
 async def start(_, message):
     file_path = time.time()
     position = await put(message.from_user.id, file_path=file_path)
+    await asyncio.sleep(5)
     if position == 1:
         afk = get(message.from_user.id)["file_path"]
         bot_uptime = int(time.time() - afk)
