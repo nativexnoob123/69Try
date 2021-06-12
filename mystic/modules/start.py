@@ -127,7 +127,7 @@ async def start(_, message):
     else:    
         position = await put(message.from_user.id, file_path=file_path)
         if position == 1:
-            print("Position 1 Check")
+            print("Position 4 Check")
             afk = getft(message.from_user.id)["file_path"]
             bot_uptime = int(time.time() - afk)
             file_1 =  f"{get_readable_time((bot_uptime))}"
@@ -152,7 +152,7 @@ async def start(_, message):
                 task_doneft(message.from_user.id)
             print(file_1)  
         if position == 3:
-            print("Position 1 Check")
+            print("Position 3 Check")
             afk = getft(message.from_user.id)["file_path"]
             bot_uptime = int(time.time() - afk)
             file_1 =  f"{get_readable_time((bot_uptime))}"
@@ -173,7 +173,7 @@ async def start(_, message):
             task_doneft(message.from_user.id)
             task_doneft(message.from_user.id)
             task_doneft(message.from_user.id)
-            print("Position 1 Check")
+            print("Position 4 Check")
             await message.reply_text("Too Fast Blocked")
    
    
