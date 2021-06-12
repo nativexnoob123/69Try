@@ -106,7 +106,11 @@ def get_readable_time(seconds: int) -> str:
     
 @app.on_message(filters.command("start"))
 async def start(_, message):
-    await message.reply_text("Hi Vro")
+    try:
+        clear(message.from_user.id) 
+        print("done")
+    except Exception as e:
+        print(e)
     
     
 @app.on_message(filters.command("play"))
