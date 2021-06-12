@@ -85,7 +85,7 @@ def get_readable_time(seconds: int) -> str:
     count = 0
     ping_time = ""
     time_list = []
-    time_suffix_list = ["s", "m", "h", "days"]
+    time_suffix_list = ["", "m", "h", "days"]
     while count < 4:
         count += 1
         if count < 3:
@@ -118,19 +118,46 @@ async def start(_, message):
             afk = getft(message.from_user.id)["file_path"]
             bot_uptime = int(time.time() - afk)
             file_1 =  f"{get_readable_time((bot_uptime))}"
+            if (file_1.isalpha()) == True:
+                try:
+                    clear(message.chat.id)  
+                except QueueEmpty:
+                    pass
+                try:
+                    clearft(message.chat.id)  
+                except QueueEmpty:
+                    pass
             print(file_1)
         if position == 2:
             afk = getft(message.from_user.id)["file_path"]
             bot_uptime = int(time.time() - afk)
             file_1 =  f"{get_readable_time((bot_uptime))}"
+            if (file_1.isalpha()) == True:
+                try:
+                    clear(message.chat.id)  
+                except QueueEmpty:
+                    pass
+                try:
+                    clearft(message.chat.id)  
+                except QueueEmpty:
+                    pass
             print(file_1)  
         if position == 3:
             afk = getft(message.from_user.id)["file_path"]
             bot_uptime = int(time.time() - afk)
             file_1 =  f"{get_readable_time((bot_uptime))}"
+            if (file_1.isalpha()) == True:
+                try:
+                    clear(message.chat.id)  
+                except QueueEmpty:
+                    pass
+                try:
+                    clearft(message.chat.id)  
+                except QueueEmpty:
+                    pass
             print(file_1)
         if position == 4:
-            await message.reply_text("Too Fast Block")    
+            await message.reply_text("Too Fast Blocked")
     else:
         print("Not Found")
         await putft(message.from_user.id, file_path=file_path)
