@@ -80,10 +80,16 @@ async def start(_, message):
     
 @app.on_message(filters.command("play"))
 async def start(_, message):
-    file_ = time.time()
-    file_path =  f"{get_readable_time((file_))}"
+    file_path = time.time()
     position = await put(message.from_user.id, file_path=file_path)
     if position == 1:
         afk = get(message.from_user.id)["file_path"]
-        print(afk)
+        bot_uptime = int(time.time() - afk)
+        file_1 =  f"{get_readable_time((bot_uptime))}"
+        print(file_1)
+    if position == 2:
+        afk = get(message.from_user.id)["file_path"]
+        bot_uptime = int(time.time() - afk)
+        file_1 =  f"{get_readable_time((bot_uptime))}"
+        print(file_1)   
    
