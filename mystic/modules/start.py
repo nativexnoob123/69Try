@@ -175,23 +175,5 @@ async def start(_, message):
             task_doneft(message.from_user.id)
             print("Position 1 Check")
             await message.reply_text("Too Fast Blocked")
-    else:
-
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
-        
-        
+   
    
