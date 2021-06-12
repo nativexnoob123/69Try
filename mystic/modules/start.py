@@ -167,6 +167,7 @@ async def start(_, message):
             afk = get(message.from_user.id)["file_path"]
             afk = get(message.from_user.id)["file_path"]
             afk = get(message.from_user.id)["file_path"]
+            afk = getft(message.from_user.id)["file_path"]
             print("Position 4 Check")
             await message.reply_text("Too Fast Blocked")
    
