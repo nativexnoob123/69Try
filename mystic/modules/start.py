@@ -121,7 +121,6 @@ async def start(_, message):
     if is_emptyft(message.from_user.id):
         await putft(message.from_user.id, file_path=file_path)
         await putft(message.from_user.id, file_path=file_path)
-        await putft(message.from_user.id, file_path=file_path)
         p = await putft(message.from_user.id, file_path=file_path)
         print(p)
     else:    
@@ -135,7 +134,6 @@ async def start(_, message):
                 print("Position 1 Blocked")
                 afk = getft(message.from_user.id)["file_path"]
                 afk = getft(message.from_user.id)["file_path"]
-                afk = getft(message.from_user.id)["file_path"]
                 afk = get(message.from_user.id)["file_path"]
             print(file_1)
         if position == 2:
@@ -146,29 +144,14 @@ async def start(_, message):
             if (file_1.isnumeric()) == False:
                 print("Position 2 Blocked")
                 afk = getft(message.from_user.id)["file_path"]
-                afk = getft(message.from_user.id)["file_path"]
                 afk = get(message.from_user.id)["file_path"]
                 afk = get(message.from_user.id)["file_path"]
-            print(file_1)  
+            print(file_1)    
         if position == 3:
             print("Position 3 Check")
-            afk = getft(message.from_user.id)["file_path"]
-            bot_uptime = int(time.time() - afk)
-            file_1 =  f"{get_readable_time((bot_uptime))}"
-            if (file_1.isnumeric()) == False:
-                print("Position 3 Blocked")
-                afk = getft(message.from_user.id)["file_path"]
-                afk = get(message.from_user.id)["file_path"]
-                afk = get(message.from_user.id)["file_path"]
-                afk = get(message.from_user.id)["file_path"]
-            print(file_1)
-        if position == 4:
-            afk = get(message.from_user.id)["file_path"]
-            afk = get(message.from_user.id)["file_path"]
-            afk = get(message.from_user.id)["file_path"]
-            afk = get(message.from_user.id)["file_path"]
-            afk = getft(message.from_user.id)["file_path"]
-            print("Position 4 Check")
             await message.reply_text("Too Fast Blocked")
-   
-   
+            afk = getft(message.from_user.id)["file_path"]
+            afk = get(message.from_user.id)["file_path"]
+            afk = get(message.from_user.id)["file_path"]
+            afk = get(message.from_user.id)["file_path"]
+            print(file_1)  
