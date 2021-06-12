@@ -119,6 +119,7 @@ async def start(_, message):
             bot_uptime = int(time.time() - afk)
             file_1 =  f"{get_readable_time((bot_uptime))}"
             if (file_1.isalpha()) == True:
+                print("Position 1")
                 try:
                     clear(message.chat.id)  
                 except QueueEmpty:
@@ -133,6 +134,7 @@ async def start(_, message):
             bot_uptime = int(time.time() - afk)
             file_1 =  f"{get_readable_time((bot_uptime))}"
             if (file_1.isalpha()) == True:
+                print("Position 2")
                 try:
                     clear(message.chat.id)  
                 except QueueEmpty:
@@ -147,6 +149,7 @@ async def start(_, message):
             bot_uptime = int(time.time() - afk)
             file_1 =  f"{get_readable_time((bot_uptime))}"
             if (file_1.isalpha()) == True:
+                print("Position 3")
                 try:
                     clear(message.chat.id)  
                 except QueueEmpty:
