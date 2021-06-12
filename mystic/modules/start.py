@@ -131,7 +131,7 @@ async def start(_, message):
             bot_uptime = int(time.time() - afk)
             file_1 =  f"{get_readable_time((bot_uptime))}"
             if (file_1.isnumeric()) == False:
-                print("Position 1 Blocked")
+                print("Position 1 Removed")
                 afk = getft(message.from_user.id)["file_path"]
                 afk = getft(message.from_user.id)["file_path"]
                 afk = get(message.from_user.id)["file_path"]
@@ -142,15 +142,19 @@ async def start(_, message):
             bot_uptime = int(time.time() - afk)
             file_1 =  f"{get_readable_time((bot_uptime))}"
             if (file_1.isnumeric()) == False:
-                print("Position 2 Blocked")
+                print("Position 2 Removed")
                 afk = getft(message.from_user.id)["file_path"]
                 afk = get(message.from_user.id)["file_path"]
                 afk = get(message.from_user.id)["file_path"]
             print(file_1)    
         if position == 3:
             print("Position 3 Check")
-            await message.reply_text("Too Fast Blocked")
             afk = getft(message.from_user.id)["file_path"]
-            afk = get(message.from_user.id)["file_path"]
-            afk = get(message.from_user.id)["file_path"]
-            afk = get(message.from_user.id)["file_path"]
+            bot_uptime = int(time.time() - afk)
+            file_1 =  f"{get_readable_time((bot_uptime))}"
+            if (file_1.isnumeric()) == False:      
+                afk = get(message.from_user.id)["file_path"]
+                afk = get(message.from_user.id)["file_path"]
+                afk = get(message.from_user.id)["file_path"]
+            else:
+                await message.reply_text("Too Fast Blocked")
