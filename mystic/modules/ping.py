@@ -172,6 +172,7 @@ async def afk_check(_, message):
             seenago =  f"{get_readable_time((finaltime))}"
             reasonafk = _note["data"]
             user = _note["user"]
+            print(user)
             if int(user) == int(message.reply_to_message.from_user.id):
                 await delete_afk_user(message.reply_to_message.from_user.id, name)
                 if _note["type"] == "text":
