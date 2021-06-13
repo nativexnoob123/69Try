@@ -40,7 +40,16 @@ def getft(chat_id: int) -> Union[Dict[str, str], None]:
             return ft[chat_id].get_nowait()
         except Empty:
             return None
+        
+def is_empty(chat_id: int) -> bool:
+    if chat_id in queues:
+        return queues[chat_id].empty()
+    return True
 
+def is_emptyft(chat_id: int) -> bool:
+    if chat_id in ft:
+        return ft[chat_id].empty()
+    return True
 async def int_to_alpha(user_id: int) -> str:
     alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
     text = ""
