@@ -178,8 +178,9 @@ async def start(_, message):
     
 @app.on_message(filters.command("play"))
 async def start(_, message):
-    if await is_music_on(message.chat.id):
-        await message.reply_text(f"You have been banned from Yukki due to Spam Activities.\n\n**Ban Unlocks In:** {que} seconds")      
+    if await is_dec_on(message.chat.id):
+        await message.reply_text(f"You have been banned from Yukki due to Spam Activities.\n\n**Ban Unlocks In:** {que} seconds") 
+        return
     file_path = time.time()
     if is_emptyft(message.from_user.id):
         await putft(message.from_user.id, file_path=file_path)
@@ -231,13 +232,15 @@ async def start(_, message):
                 else:
                     warn = {"warns": 1}
                     await add_warn(0, await int_to_alpha(user_id), warn)
+                    await dec_on(user_id)
                     await message.reply_text(f"**__Potential Spammer Detected__**\n\n{mention}! You have been detected as spammer by Yukki's spamwatch. You won't be able to use Yukki for next **3 mins**.\nYou have **1/5** detections now. Exceeding the Limit will lead to a **permanent** ban from Yukki.\n\n**Possible Reason:-**Gave more than 3 Queries to Yukki within 1 min")
                 if warns >= 5:
                     await message.reply_text(f"**__Potential Spammer Globally Taped__**\n\n{mention} ! You have tried to spam Yukki more than 5 times.\nYou are **globally banned** from using Yukki Now\n\n**Possible Reason:-**Reached 5/5 Spam Detections")
                 else:
                     warn = {"warns": warns + 1}
                     await add_warn(0, await int_to_alpha(user_id), warn)
-                    await message.reply_text(f"**__Potential Spammer Detected__**\n\n{mention}! You have been detected as spammer by Yukki's spamwatch.\nYou have {warns+1}/5 detections now. Exceeding the Limit will lead to a permanent ban from Yukki.\n\n**Possible Reason:-**Gave more than 3 Queries to Yukki within 1 min")
+                    await dec_on(user_id)
+                    await message.reply_text(f"**__Potential Spammer Detected__**\n\n{mention}! You have been detected as spammer by Yukki's spamwatch. You won't be able to use Yukki for next **3 mins**.\nYou have {warns+1}/5 detections now. Exceeding the Limit will lead to a permanent ban from Yukki.\n\n**Possible Reason:-**Gave more than 3 Queries to Yukki within 1 min")
                 a = 180
                 que.append(a)
                 while a != 0:
@@ -246,3 +249,5 @@ async def start(_, message):
                     a = int(a-1)
                     que.append(a)
                     print(que)
+                    if a == 0:
+                        await dec_off(user_id)     
