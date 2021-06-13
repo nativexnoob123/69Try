@@ -165,14 +165,7 @@ def get_readable_time(seconds: int) -> str:
     
 @app.on_message(filters.command("start"))
 async def start(_, message):
-    try:
-        print("done")
-    except QueueEmpty:
-        print("Empty")
-    except Exception as e:
-        print("error")
-        print(e)
-    
+    await remove_gban_user(message.from_user.id) 
     
 @app.on_message(filters.command("play"))
 async def start(_, message):
