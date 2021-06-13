@@ -195,6 +195,9 @@ async def start(_, message):
                 afk = get(message.from_user.id)["file_path"]
                 afk = get(message.from_user.id)["file_path"]
             else:
+                afk = get(message.from_user.id)["file_path"]
+                afk = get(message.from_user.id)["file_path"]
+                afk = get(message.from_user.id)["file_path"]
                 user_id = message.from_user.id
                 mention = message.from_user.mention
                 warns = await get_warn(0, await int_to_alpha(user_id))
