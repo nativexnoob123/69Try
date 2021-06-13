@@ -97,13 +97,18 @@ async def afk_check(_, message):
     user_id = message.from_user.id
     name = "Hello"
     if message.reply_to_message:
+        print("Reply")
         _note = await get_note(message.reply_to_message.from_user.id, name)
         if not _note:
+            print("None Found")
             pass
         else:
+            print("Found")
             timeafk = _note["time"]
+            print(timeafk)
             finaltime = int(time.time() - timeafk)
             seenago =  f"{get_readable_time((finaltime))}"
+            
             reason = _note["data"]
             if _note["type"] == "text":
                 if reason != "None":
