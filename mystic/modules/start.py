@@ -234,7 +234,7 @@ async def start(_, message):
                     await add_warn(0, await int_to_alpha(user_id), warn)
                     await add_gban_user(user_id)
                     await message.reply_text(f"**__Potential Spammer Detected__**\n\n{mention}! You have been detected as spammer by Yukki's spamwatch. You won't be able to use Yukki for next **3 mins**.\nYou have **1/5** detections now. Exceeding the Limit will lead to a **permanent** ban from Yukki.\n\n**Possible Reason:-**Gave more than 3 Queries to Yukki within 1 min")
-                if warns >= 5:
+                if int(warns) >= 5:
                     await add_gban_user(user_id)
                     await message.reply_text(f"**__Potential Spammer Globally Taped__**\n\n{mention} ! You have tried to spam Yukki more than 5 times.\nYou are **globally banned** from using Yukki Now\n\n**Possible Reason:-**Reached 5/5 Spam Detections")
                 else:
