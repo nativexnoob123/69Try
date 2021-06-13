@@ -103,6 +103,7 @@ async def afk(_, message):
         await message.reply_text(f"{from_user_mention} is now afk!")  
         return   
     if message.reply_to_message:
+        print("reply")
         if (message.reply_to_message.animation or message.reply_to_message.sticker): 
             if message.reply_to_message.animation:
                 print("gif reply")
