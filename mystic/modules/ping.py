@@ -5,11 +5,34 @@ import asyncio
 from asyncio import Queue, QueueEmpty as Empty, QueueEmpty
 from typing import Dict, Union, List
 from pyrogram import filters, Client
-from mystic.modules.start import get_readable_time
 __MODULE__ = "Ping"
 __HELP__ = "Pong."
 
 notesdb = db.notes
+
+def get_readable_time(seconds: int) -> str:
+    count = 0
+    ping_time = ""
+    time_list = []
+    time_suffix_list = ["s", "m", "h", "days"]
+    while count < 4:
+        count += 1
+        if count < 3:
+            remainder, result = divmod(seconds, 60)
+        else:
+            remainder, result = divmod(seconds, 24)
+        if seconds == 0 and remainder == 0:
+            break
+        time_list.append(int(result))
+        seconds = int(remainder)
+    for i in range(len(time_list)):
+        time_list[i] = str(time_list[i]) + time_suffix_list[i]
+    if len(time_list) == 4:
+        ping_time += time_list.pop() + ", "
+    time_list.reverse()
+    ping_time += ":".join(time_list)
+    return ping_time
+
 async def get_notes_count() -> dict:
     chats = notesdb.find({"chat_id": {"$lt": 0}})
     if not chats:
@@ -73,13 +96,23 @@ chat_watcher_group = 5
 async def afk_check(_, message):
     user_id = message.from_user.id
     name = "Hello"
-    _note = await get_note(message.from_user.id, name)
-    if not _note:
-        pass
-    else:
-        timeafk = _note["time"]
-        print(timeafk)
-
+    if message.reply_to_message:
+        _note = await get_note(message.reply_to_message.from_user.id, name)
+        if not _note:
+            pass
+        else:
+            timeafk = _note["time"]
+            finaltime = int(time.time() - timeafk)
+            time =  f"{get_readable_time((finaltime))}"
+            if _note["type"] == "text":
+                if _note["data"] != "None":
+                    await message.reply_text(f"**__AFK__**\n\n{message.reply_to_message.from_user.first_name} is offline.\n__Last Seen:__ {time} ago\n__Reason;__ _note["data"]", disable_web_page_preview=True)
+                else:
+                    await message.reply_text(f"**__AFK__**\n\n{message.reply_to_message.from_user.first_name} is offline.\n__Last Seen:__ {time} ago", disable_web_page_preview=True)                             
+            elif _note["type"] == "animation":
+                await message.reply_animation(_note["data"], caption = f"**__AFK__**\n\n{message.reply_to_message.from_user.first_name} is offline.\n__Last Seen:__ {time} ago")
+            else:
+                await message.reply_sticker(_note["data"], caption = f"**__AFK__**\n\n{message.reply_to_message.from_user.first_name} is offline.\n__Last Seen:__ {time} ago")
 
 
 
