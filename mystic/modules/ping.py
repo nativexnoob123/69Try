@@ -74,7 +74,7 @@ async def delete_note(chat_id: int, name: str) -> bool:
 
 
 @app.on_message(filters.command("afk"))
-async def afk(_, message: Message): 
+async def afk(_, message):
     _time = time.time() 
     name = message.from_user.id
     from_user_mention = message.from_user.mention
