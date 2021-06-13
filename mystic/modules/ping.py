@@ -57,7 +57,7 @@ async def save_user_afk(chat_id: int, name: str, note: dict):
 
 async def delete_note(chat_id: int, name: str) -> bool:
     notesd = await _get_notes(chat_id)
-    name = name.lower().strip()
+    name = "Hello"
     if name in notesd:
         del notesd[name]
         await notesdb.update_one(
@@ -65,6 +65,54 @@ async def delete_note(chat_id: int, name: str) -> bool:
         )
         return True
     return False
+
+
+
+chat_watcher_group = 5  
+@app.on_message(group=chat_watcher_group)
+async def afk_check(_, message):
+    user_id = message.from_user.id
+    name = "Hello"
+    _note = await get_note(message.from_user.id, name)
+    if not _note:
+        pass
+    else:
+        timeafk = _note["time"]
+        print(timeafk)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
