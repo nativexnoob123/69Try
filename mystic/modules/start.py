@@ -13,24 +13,24 @@ __HELP__ = "•Anime uwu•\n\n/anime - search anime on AniList\n /manga - searc
 
 
 async def is_dec_on(user_id: int) -> bool:
-    chat = await decdb.find_one({"chat_id_toggle": chat_id})
+    chat = await decdb.find_one({"chat_id_toggle": user_id})
     if not chat:
         return True
     return False
 
 
 async def dec_on(user_id: int):
-    is_karma = await is_dec_on(chat_id)
+    is_karma = await is_dec_on(user_id)
     if is_karma:
         return
-    return await decdb.delete_one({"chat_id_toggle": chat_id})
+    return await decdb.delete_one({"chat_id_toggle": user_id})
 
 
 async def dec_off(user_id: int):
-    is_karma = await is_dec_on(chat_id)
+    is_karma = await is_dec_on(user_id)
     if not is_karma:
         return
-    return await decdb.insert_one({"chat_id_toggle": chat_id})
+    return await decdb.insert_one({"chat_id_toggle": user_id})
 
 
 
