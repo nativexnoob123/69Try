@@ -1,4 +1,4 @@
-from mystic import app
+from mystic import app, db
 from datetime import datetime
 import time
 import asyncio
@@ -9,7 +9,7 @@ from mystic.modules.start import get_readable_time
 __MODULE__ = "Ping"
 __HELP__ = "Pong."
 
-
+notesdb = db.notes
 async def get_notes_count() -> dict:
     chats = notesdb.find({"chat_id": {"$lt": 0}})
     if not chats:
