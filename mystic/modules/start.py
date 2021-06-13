@@ -178,7 +178,8 @@ async def start(_, message):
     
 @app.on_message(filters.command("play"))
 async def start(_, message):
-    if await is_dec_on(message.from_user.id):
+    user_id = message.from_user.id
+    if await is_dec_on(user_id):
         await message.reply_text(f"You have been banned from Yukki due to Spam Activities.\n\n**Ban Unlocks In:** {que} seconds") 
         return
     file_path = time.time()
@@ -224,7 +225,6 @@ async def start(_, message):
                 afk = get(message.from_user.id)["file_path"]
                 afk = get(message.from_user.id)["file_path"]
                 afk = get(message.from_user.id)["file_path"]
-                user_id = message.from_user.id
                 mention = message.from_user.mention
                 warns = await get_warn(0, await int_to_alpha(user_id))
                 if warns:
