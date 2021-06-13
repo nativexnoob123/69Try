@@ -9,7 +9,7 @@ __MODULE__ = "Ping"
 __HELP__ = "Pong."
 
 notesdb = db.notes
-
+ffdb = db.ff
 def get_readable_time(seconds: int) -> str:
     count = 0
     ping_time = ""
@@ -32,6 +32,24 @@ def get_readable_time(seconds: int) -> str:
     time_list.reverse()
     ping_time += ":".join(time_list)
     return ping_time
+
+async def is_afk_user(user_id: int) -> bool:
+    user = await ffdb.find_one({"user_id": user_id})
+    if not user:
+        return False
+    return True
+  
+async def add_afk_user(user_id: int):
+    is_gbanned = await is_afk_user(user_id)
+    if is_gbanned:
+        return
+    return await ffdb.insert_one({"user_id": user_id})
+  
+async def remove_afk_user(user_id: int):
+    is_gbanned = await is_afk_user(user_id)
+    if not is_gbanned:
+        return
+    return await ffdb.delete_one({"user_id": user_id})  
 
 async def get_notes_count() -> dict:
     chats = notesdb.find({"chat_id": {"$lt": 0}})
@@ -103,6 +121,9 @@ async def afk_check(_, message):
             print("None Found reply")
             pass
         else:
+            if await is_afk_user(message.from_user.id):
+                await remove_afk_user(user_id)  
+                return
             print("Found direct")
             timeafk = _note["time"]
             print(timeafk)
@@ -253,6 +274,7 @@ async def afk(_, message):
     name = "Hello"
     _user = message.from_user.id
     from_user_mention = message.from_user.mention
+    await add_afk_user(_user)
     if len(message.command) == 1 and not message.reply_to_message:
         print("None Pasted No reply")
         _type = "text"
