@@ -78,7 +78,7 @@ async def afk(_, message):
     _time = time.time() 
     name = message.from_user.id
     from_user_mention = message.from_user.mention
-    if len(message.command) == 1 or message.reply_to_message:
+    if len(message.command) == 1 and not message.reply_to_message:
         print("None Pasted No reply")
         _type = "text"
         _data = "None"
