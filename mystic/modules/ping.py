@@ -46,7 +46,7 @@ async def get_note(chat_id: int, name: str) -> Union[bool, dict]:
         return False
 
 
-async def save_user_afk(chat_id: int, name: str, note: dict):
+async def save_user_afk(chat_id: int, name: int, note: dict):
     name = name.lower().strip()
     _notes = await _get_notes(chat_id)
     _notes[name] = note
