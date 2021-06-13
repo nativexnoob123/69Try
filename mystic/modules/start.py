@@ -1,10 +1,10 @@
-from mystic import app
+from mystic import app, db
 from pyrogram import filters
 import time
 import asyncio
 from asyncio import Queue, QueueEmpty as Empty, QueueEmpty
 from typing import Dict, Union
-
+warnsdb = db.warns
 
 __MODULE__ = "Start"
 __HELP__ = "•Anime uwu•\n\n/anime - search anime on AniList\n /manga - search manga on Anilist\n /char - search character on Anilist\n /nhentai ID - returns the nhentai in telegraph instant preview format."
@@ -41,46 +41,75 @@ def getft(chat_id: int) -> Union[Dict[str, str], None]:
         except Empty:
             return None
 
-def is_empty(chat_id: int) -> bool:
-    if chat_id in queues:
-        return queues[chat_id].empty()
-    return True
+async def int_to_alpha(user_id: int) -> str:
+    alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+    text = ""
+    user_id = str(user_id)
+    for i in user_id:
+        text += alphabet[int(i)]
+    return text
 
-def is_emptyft(chat_id: int) -> bool:
-    if chat_id in ft:
-        return ft[chat_id].empty()
-    return True
 
-def task_done(chat_id: int):
-    if chat_id in queues:
-        try:
-            queues[chat_id].task_done()
-        except ValueError:
-            pass
-        
-def task_doneft(chat_id: int):
-    if chat_id in ft:
-        try:
-            ft[chat_id].task_done()
-        except ValueError:
-            pass
+async def alpha_to_int(user_id_alphabet: str) -> int:
+    alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"]
+    user_id = ""
+    for i in user_id_alphabet:
+        index = alphabet.index(i)
+        user_id += str(index)
+    user_id = int(user_id)
+    return user_id
 
-def clear(chat_id: int):
-    if chat_id in queues:
-        if queues[chat_id].empty():
-            raise Empty
-        else:
-            queues[chat_id].queue = []
-    raise Empty
- 
-def clearft(chat_id: int):
-    if chat_id in ft:
-        if ft[chat_id].empty():
-            raise Empty
-        else:
-            ft[chat_id].queue = []
-    raise Empty
-    
+
+async def get_warns_count() -> dict:
+    chats = warnsdb.find({"chat_id": {"$lt": 0}})
+    if not chats:
+        return {}
+    chats_count = 0
+    warns_count = 0
+    for chat in await chats.to_list(length=100000000):
+        for user in chat["warns"]:
+            warns_count += chat["warns"][user]["warns"]
+        chats_count += 1
+    return {"chats_count": chats_count, "warns_count": warns_count}
+
+
+async def get_warns(chat_id: int) -> Dict[str, int]:
+    warns = await warnsdb.find_one({"chat_id": chat_id})
+    if not warns:
+        return {}
+    return warns["warns"]
+
+
+async def get_warn(chat_id: int, name: str) -> Union[bool, dict]:
+    name = name.lower().strip()
+    warns = await get_warns(chat_id)
+    if name in warns:
+        return warns[name]
+
+
+async def add_warn(chat_id: int, name: str, warn: dict):
+    name = name.lower().strip()
+    warns = await get_warns(chat_id)
+    warns[name] = warn
+
+    await warnsdb.update_one(
+        {"chat_id": chat_id}, {"$set": {"warns": warns}}, upsert=True
+    )
+
+
+async def remove_warns(chat_id: int, name: str) -> bool:
+    warnsd = await get_warns(chat_id)
+    name = name.lower().strip()
+    if name in warnsd:
+        del warnsd[name]
+        await warnsdb.update_one(
+            {"chat_id": chat_id}, {"$set": {"warns": warnsd}}, upsert=True
+        )
+        return True
+    return False
+
+
+
 def get_readable_time(seconds: int) -> str:
     count = 0
     ping_time = ""
@@ -157,4 +186,17 @@ async def start(_, message):
                 afk = get(message.from_user.id)["file_path"]
                 afk = get(message.from_user.id)["file_path"]
             else:
-                await message.reply_text("Too Fast Blocked")
+                warns = await get_warn(0, await int_to_alpha(user_id))
+                if warns:
+                    warns = warns["warns"]
+                else:
+                    warn = {"warns": 1}
+                    await add_warn(0, await int_to_alpha(user_id), warn)
+                    return await message.reply_text(f"**__Potential Spammer Detected__**\n\n{mention}! You have been detected as spammer by Yukki's spamwatch. You won't be able to use Yukki for next **3 mins**.\nYou have **1/5** detections now. Exceeding the Limit will lead to a **permanent** ban from Yukki.\n\n**Possible Reason:-**Gave more than 3 Queries to Yukki within 1 min")
+                if warns >= 5:
+                    await message.reply_text(f"**__Potential Spammer Globally Taped__**\n\n{mention} ! You have tried to spam Yukki more than 5 times.\nYou are **globally banned** from using Yukki Now\n\n**Possible Reason:-**Reached 5/5 Spam Detections")
+                    await remove_warns(0, await int_to_alpha(user_id))
+                else:
+                    warn = {"warns": warns + 1}
+                    await add_warn(0, await int_to_alpha(user_id), warn)
+                    await message.reply_text(f"**__Potential Spammer Detected__**\n\n{mention}! You have been detected as spammer by Yukki's spamwatch.\nYou have {warns+1}/5 detections now. Exceeding the Limit will lead to a permanent ban from Yukki.\n\n**Possible Reason:-**Gave more than 3 Queries to Yukki within 1 min")
