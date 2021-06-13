@@ -113,7 +113,8 @@ async def afk_check(_, message):
             if int(user) == int(message.reply_to_message.from_user.id):
                 await delete_afk_user(message.reply_to_message.from_user.id, name)
                 if reasonafk != "None":
-                    await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is back online__**\n\n__Was AFK For:__ {seenago} ago\n__Reason:__ {reasonafk}", disable_web_page_preview=True)
+                    await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is back online__**\n\n__Was AFK For:__ {seenago}\n__Reason:__ {reasonafk}", disable_web_page_preview=True)
+                    return
             if _note["type"] == "text":
                 if reasonafk != "None":
                     await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago\n__Reason:__ {reasonafk}", disable_web_page_preview=True)
