@@ -179,7 +179,7 @@ async def start(_, message):
 @app.on_message(filters.command("play"))
 async def start(_, message):
     user_id = message.from_user.id
-    if await is_dec_on(message.chat.id):
+    if not await is_dec_on(message.chat.id):
         await message.reply_text(f"You have been banned from Yukki due to Spam Activities.\n\n**Ban Unlocks In:** {que} seconds") 
         return
     file_path = time.time()
