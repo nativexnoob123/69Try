@@ -104,15 +104,18 @@ async def afk_check(_, message):
             timeafk = _note["time"]
             finaltime = int(time.time() - timeafk)
             time =  f"{get_readable_time((finaltime))}"
+            reason = _note["data"]
             if _note["type"] == "text":
-                if _note["data"] != "None":
-                    await message.reply_text(f"**__AFK__**\n\n{message.reply_to_message.from_user.first_name} is offline.\n__Last Seen:__ {time} ago\n__Reason;__ _note["data"]", disable_web_page_preview=True)
+                if reason != "None":
+                    await message.reply_text(f"**__AFK__**\n\n{message.reply_to_message.from_user.first_name} is offline.\n__Last Seen:__ {time} ago\n__Reason;__ {reason}", disable_web_page_preview=True)
                 else:
                     await message.reply_text(f"**__AFK__**\n\n{message.reply_to_message.from_user.first_name} is offline.\n__Last Seen:__ {time} ago", disable_web_page_preview=True)                             
             elif _note["type"] == "animation":
                 await message.reply_animation(_note["data"], caption = f"**__AFK__**\n\n{message.reply_to_message.from_user.first_name} is offline.\n__Last Seen:__ {time} ago")
+                disable_web_page_preview=True
             else:
                 await message.reply_sticker(_note["data"], caption = f"**__AFK__**\n\n{message.reply_to_message.from_user.first_name} is offline.\n__Last Seen:__ {time} ago")
+                disable_web_page_preview=True
 
 
 
