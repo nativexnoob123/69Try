@@ -38,7 +38,7 @@ async def get_note_names(chat_id: int) -> List[str]:
 
 
 async def get_note(chat_id: int, name: str) -> Union[bool, dict]:
-    name = name.lower().strip()
+    name = "Hello"
     _notes = await _get_notes(chat_id)
     if name in _notes:
         return _notes[name]
@@ -46,8 +46,8 @@ async def get_note(chat_id: int, name: str) -> Union[bool, dict]:
         return False
 
 
-async def save_user_afk(chat_id: int, name: int, note: dict):
-    name = name
+async def save_user_afk(chat_id: int, name: str, note: dict):
+    name = "Hello"
     _notes = await _get_notes(chat_id)
     _notes[name] = note
     await notesdb.update_one(
