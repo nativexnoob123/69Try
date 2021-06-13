@@ -177,7 +177,7 @@ async def start(_, message):
 @app.on_message(filters.command("play"))
 async def start(_, message):
     user_id = message.from_user.id
-    if await is_banned_user(message.from_user.id):
+    if not await is_banned_user(message.from_user.id):
         pass
     else:
         await message.reply_text(f"You have been banned from Yukki due to Spam Activities.\n\n**Ban Unlocks In:** 3 Mins") 
