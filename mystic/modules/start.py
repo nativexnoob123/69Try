@@ -12,26 +12,24 @@ __HELP__ = "•Anime uwu•\n\n/anime - search anime on AniList\n /manga - searc
 
 
 
-async def is_dec_on(chat_id: int) -> bool:
-    chat = await decdb.find_one({"chat_id_toggle": chat_id})
-    if not chat:
-        return True
-    return False
-
-
-async def dec_on(chat_id: int):
-    is_karma = await is_dec_on(chat_id)
-    if is_karma:
+async def is_sudo_user(user_id: int) -> bool:
+    user = await decdb.find_one({"user_id": user_id})
+    if not user:
+        return False
+    return True
+  
+async def add_gban_user(user_id: int):
+    is_gbanned = await is_sudo_user(user_id)
+    if is_gbanned:
         return
-    return await decdb.delete_one({"chat_id_toggle": chat_id})
-
-
-async def dec_off(chat_id: int):
-    is_karma = await is_dec_on(chat_id)
-    if not is_karma:
+    return await decdb.insert_one({"user_id": user_id})
+  
+async def remove_gban_user(user_id: int):
+    is_gbanned = await is_sudo_user(user_id)
+    if not is_gbanned:
         return
-    return await decdb.insert_one({"chat_id_toggle": chat_id})
-
+    return await decdb.delete_one({"user_id": user_id})  
+  
 
 
 queues: Dict[int, Queue] = {}
@@ -179,7 +177,7 @@ async def start(_, message):
 @app.on_message(filters.command("play"))
 async def start(_, message):
     user_id = message.from_user.id
-    if not await is_dec_on(message.chat.id):
+    if not await is_sudo_user(message.from_user.id):
         await message.reply_text(f"You have been banned from Yukki due to Spam Activities.\n\n**Ban Unlocks In:** 3 Mins") 
         return
     file_path = time.time()
@@ -232,14 +230,15 @@ async def start(_, message):
                 else:
                     warn = {"warns": 1}
                     await add_warn(0, await int_to_alpha(user_id), warn)
-                    await dec_on(user_id)
+                    await add_gban_user(user_id)
                     await message.reply_text(f"**__Potential Spammer Detected__**\n\n{mention}! You have been detected as spammer by Yukki's spamwatch. You won't be able to use Yukki for next **3 mins**.\nYou have **1/5** detections now. Exceeding the Limit will lead to a **permanent** ban from Yukki.\n\n**Possible Reason:-**Gave more than 3 Queries to Yukki within 1 min")
                 if warns >= 5:
+                    await add_gban_user(user_id)
                     await message.reply_text(f"**__Potential Spammer Globally Taped__**\n\n{mention} ! You have tried to spam Yukki more than 5 times.\nYou are **globally banned** from using Yukki Now\n\n**Possible Reason:-**Reached 5/5 Spam Detections")
                 else:
                     warn = {"warns": warns + 1}
                     await add_warn(0, await int_to_alpha(user_id), warn)
-                    await dec_on(user_id)
+                    await add_gban_user(user_id)
                     await message.reply_text(f"**__Potential Spammer Detected__**\n\n{mention}! You have been detected as spammer by Yukki's spamwatch. You won't be able to use Yukki for next **3 mins**.\nYou have {warns+1}/5 detections now. Exceeding the Limit will lead to a permanent ban from Yukki.\n\n**Possible Reason:-**Gave more than 3 Queries to Yukki within 1 min")
                 await asyncio.sleep(180)
-                await dec_off(user_id)     
+                await remove_gban_user(user_id)     
