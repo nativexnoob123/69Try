@@ -108,19 +108,29 @@ async def afk_check(_, message):
             print(timeafk)
             finaltime = int(time.time() - timeafk)
             seenago =  f"{get_readable_time((finaltime))}"
-            
-            reason = _note["data"]
+            reasonafk = _note["data"]
             if _note["type"] == "text":
                 if reason != "None":
-                    await message.reply_text(f"**__AFK__**\n\n{message.reply_to_message.from_user.first_name} is offline.\n__Last Seen:__ {seenago} ago\n__Reason;__ {reason}", disable_web_page_preview=True)
+                    await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago\n__Reason;__ {reasonafk}", disable_web_page_preview=True)
                 else:
-                    await message.reply_text(f"**__AFK__**\n\n{message.reply_to_message.from_user.first_name} is offline.\n__Last Seen:__ {seenago} ago", disable_web_page_preview=True)                             
+                    await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago", disable_web_page_preview=True)                             
             elif _note["type"] == "animation":
-                await message.reply_animation(_note["data"], caption = f"**__AFK__**\n\n{message.reply_to_message.from_user.first_name} is offline.\n__Last Seen:__ {seenago} ago")
-                disable_web_page_preview=True
+                reasongif = _note["reason"]
+                if reasongif = "None":
+                    await message.reply_animation(_note["data"], caption = f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago")
+                    disable_web_page_preview=True
+                else:
+                    await message.reply_animation(_note["data"], caption = f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago\n__Reason;__ {reasongif}")
+                    disable_web_page_preview=True
             else:
-                await message.reply_sticker(_note["data"], caption = f"**__AFK__**\n\n{message.reply_to_message.from_user.first_name} is offline.\n__Last Seen:__ {seenago} ago")
-                disable_web_page_preview=True
+                reasonsticker = _note["reason"]
+                if reasonsticker = "None":
+                    await message.reply_sticker(_note["data"])
+                    await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago", disable_web_page_preview=True)
+                else:
+                    await message.reply_sticker(_note["data"])
+                    await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago\n__Reason;__ {reasonsticker}", disable_web_page_preview=True)
+                    
 
 
 
@@ -198,11 +208,22 @@ async def afk(_, message):
                 print("gif reply")
                 _data = message.reply_to_message.animation.file_id
                 _type = "animation"
-                note = {
-                    "type": _type,
-                    "time": _time,
-                    "data": _data,
-                }
+                if len(message.command) == 1:
+                    _reason = "None"
+                    note = {
+                        "type": _type,
+                        "time": _time,
+                        "data": _data,
+                        "reason": _reason,
+                    }
+                if len(message.command) > 1:
+                    _reason = message.text.split(None, 1)[1].strip()
+                    note = {
+                        "type": _type,
+                        "time": _time,
+                        "data": _data,
+                        "reason": _reason,
+                    }
                 await save_user_afk(message.from_user.id, name, note)
                 await message.reply_text(f"{from_user_mention} is now afk!")  
                 return
@@ -210,11 +231,22 @@ async def afk(_, message):
                 print("sticker reply")
                 _data = message.reply_to_message.sticker.file_id
                 _type = "sticker"
-                note = {
-                    "type": _type,
-                    "time": _time,
-                    "data": _data,
-                }
+                if len(message.command) == 1:
+                    _reason = "None"
+                    note = {
+                        "type": _type,
+                        "time": _time,
+                        "data": _data,
+                        "reason": _reason,
+                    }
+                if len(message.command) > 1:
+                    _reason = message.text.split(None, 1)[1].strip()
+                    note = {
+                        "type": _type,
+                        "time": _time,
+                        "data": _data,
+                        "reason": _reason,
+                    }   
                 await save_user_afk(message.from_user.id, name, note)
                 await message.reply_text(f"{from_user_mention} is now afk!")  
                 return
