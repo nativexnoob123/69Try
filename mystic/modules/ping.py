@@ -96,6 +96,47 @@ chat_watcher_group = 5
 async def afk_check(_, message):
     user_id = message.from_user.id
     name = "Hello"
+    a = 1
+    if a == 1:
+        _note = await get_note(message.from_user.id, name)
+        if not _note:
+            print("None Found")
+            pass
+        else:
+            print("Found")
+            timeafk = _note["time"]
+            print(timeafk)
+            finaltime = int(time.time() - timeafk)
+            seenago =  f"{get_readable_time((finaltime))}"
+            reasonafk = _note["data"]
+            user = _note["user"]
+            if int(user) == int(message.from_user.id):
+                await delete_afk_user(message.from_user.id, name)
+                if _note["type"] == "text":
+                    if reasonafk != "None":
+                        await message.reply_text(f"**__{message.from_user.first_name} is back online__**\n\n__Was AFK For:__ {seenago}\n__Reason:__ {reasonafk}", disable_web_page_preview=True)
+                        return
+                    else:
+                        await message.reply_text(f"**__{message.from_user.first_name} is back online__**\n\n__Was AFK For:__ {seenago}", disable_web_page_preview=True)  
+                        return
+                elif _note["type"] == "animation":
+                    reasongif = _note["reason"]
+                    if reasongif == "None":
+                        await message.reply_animation(_note["data"], caption = f"**__{message.from_user.first_name} is back online__**\n\n__Was AFK For:__ {seenago}")
+                        return
+                        disable_web_page_preview=True
+                    else:
+                        await message.reply_animation(_note["data"], caption = f"**__{message.from_user.first_name} is back online__**\n\n__Was AFK For:__ {seenago}\n__Reason:__ {reasongif}")
+                        return
+                        disable_web_page_preview=True        
+                else:
+                    reasonsticker = _note["reason"]
+                    if reasonsticker == "None":
+                        await message.reply_text(f"**__{message.from_user.first_name} is back online__**\n\n__Was AFK For:__ {seenago}", disable_web_page_preview=True)
+                        return
+                    else:
+                        await message.reply_text(f"**__{message.from_user.first_name} is back online__**\n\n__Was AFK For:__ {seenago}\n__Reason:__ {reasonsticker}", disable_web_page_preview=True)  
+                        return   
     if message.reply_to_message:
         print("Reply")
         _note = await get_note(message.reply_to_message.from_user.id, name)
@@ -112,30 +153,58 @@ async def afk_check(_, message):
             user = _note["user"]
             if int(user) == int(message.reply_to_message.from_user.id):
                 await delete_afk_user(message.reply_to_message.from_user.id, name)
-                if reasonafk != "None":
-                    await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is back online__**\n\n__Was AFK For:__ {seenago}\n__Reason:__ {reasonafk}", disable_web_page_preview=True)
-                    return
+                if _note["type"] == "text":
+                    if reasonafk != "None":
+                        await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is back online__**\n\n__Was AFK For:__ {seenago}\n__Reason:__ {reasonafk}", disable_web_page_preview=True)
+                        return
+                    else:
+                        await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is back online__**\n\n__Was AFK For:__ {seenago}", disable_web_page_preview=True)  
+                        return
+                elif _note["type"] == "animation":
+                    reasongif = _note["reason"]
+                    if reasongif == "None":
+                        await message.reply_animation(_note["data"], caption = f"**__{message.reply_to_message.from_user.first_name} is back online__**\n\n__Was AFK For:__ {seenago}")
+                        return
+                        disable_web_page_preview=True
+                    else:
+                        await message.reply_animation(_note["data"], caption = f"**__{message.reply_to_message.from_user.first_name} is back online__**\n\n__Was AFK For:__ {seenago}\n__Reason:__ {reasongif}")
+                        return
+                        disable_web_page_preview=True        
+                else:
+                    reasonsticker = _note["reason"]
+                    if reasonsticker == "None":
+                        await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is back online__**\n\n__Was AFK For:__ {seenago}", disable_web_page_preview=True)
+                        return
+                    else:
+                        await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is back online__**\n\n__Was AFK For:__ {seenago}\n__Reason:__ {reasonsticker}", disable_web_page_preview=True)  
+                        return   
             if _note["type"] == "text":
                 if reasonafk != "None":
                     await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago\n__Reason:__ {reasonafk}", disable_web_page_preview=True)
+                    return
                 else:
-                    await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago", disable_web_page_preview=True)                             
+                    await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago", disable_web_page_preview=True)   
+                    return
             elif _note["type"] == "animation":
                 reasongif = _note["reason"]
                 if reasongif == "None":
                     await message.reply_animation(_note["data"], caption = f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago")
+                    return
                     disable_web_page_preview=True
                 else:
                     await message.reply_animation(_note["data"], caption = f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago\n__Reason:__ {reasongif}")
+                    return
                     disable_web_page_preview=True
             else:
                 reasonsticker = _note["reason"]
                 if reasonsticker == "None":
                     await message.reply_sticker(_note["data"])
                     await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago", disable_web_page_preview=True)
+                    return
                 else:
                     await message.reply_sticker(_note["data"])
                     await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago\n__Reason:__ {reasonsticker}", disable_web_page_preview=True)
+                    return
                     
 
 
