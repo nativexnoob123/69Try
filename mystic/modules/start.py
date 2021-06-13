@@ -180,7 +180,7 @@ async def start(_, message):
 async def start(_, message):
     user_id = message.from_user.id
     if not await is_dec_on(message.chat.id):
-        await message.reply_text(f"You have been banned from Yukki due to Spam Activities.\n\n**Ban Unlocks In:** {que} seconds") 
+        await message.reply_text(f"You have been banned from Yukki due to Spam Activities.\n\n**Ban Unlocks In:** 3 Mins") 
         return
     file_path = time.time()
     if is_emptyft(message.from_user.id):
@@ -241,13 +241,5 @@ async def start(_, message):
                     await add_warn(0, await int_to_alpha(user_id), warn)
                     await dec_on(user_id)
                     await message.reply_text(f"**__Potential Spammer Detected__**\n\n{mention}! You have been detected as spammer by Yukki's spamwatch. You won't be able to use Yukki for next **3 mins**.\nYou have {warns+1}/5 detections now. Exceeding the Limit will lead to a permanent ban from Yukki.\n\n**Possible Reason:-**Gave more than 3 Queries to Yukki within 1 min")
-                a = 180
-                que.append(a)
-                while a != 0:
-                    que.pop(0)
-                    time.sleep(1)
-                    a = int(a-1)
-                    que.append(a)
-                    print(que)
-                    if a == 0:
-                        await dec_off(user_id)     
+                await asyncio.sleep(180)
+                await dec_off(user_id)     
