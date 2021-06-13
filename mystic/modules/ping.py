@@ -116,7 +116,7 @@ async def afk_check(_, message):
                     await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago", disable_web_page_preview=True)                             
             elif _note["type"] == "animation":
                 reasongif = _note["reason"]
-                if reasongif = "None":
+                if reasongif == "None":
                     await message.reply_animation(_note["data"], caption = f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago")
                     disable_web_page_preview=True
                 else:
@@ -124,7 +124,7 @@ async def afk_check(_, message):
                     disable_web_page_preview=True
             else:
                 reasonsticker = _note["reason"]
-                if reasonsticker = "None":
+                if reasonsticker == "None":
                     await message.reply_sticker(_note["data"])
                     await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago", disable_web_page_preview=True)
                 else:
