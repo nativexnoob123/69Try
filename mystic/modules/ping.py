@@ -68,10 +68,7 @@ async def delete_note(chat_id: int, name: str) -> bool:
 
 
 
-chat_watcher_group = 5  
-@app.on_message(group=chat_watcher_group)
-async def afakcheck(_, message: Message):
-    user_id = message.from_user.id
+
 
 
 
