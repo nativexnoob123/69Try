@@ -90,7 +90,7 @@ async def afk(_, message):
         await save_user_afk(message.from_user.id, name, note)
         await message.reply_text(f"{from_user_mention} is now afk!")  
         return
-    if len(message.command) > 1 or message.reply_to_message:
+    if len(message.command) > 1 and not message.reply_to_message:
         print("Message Pasted No reply")
         _data = message.text.split(None, 1)[1].strip()
         _type = "text"
