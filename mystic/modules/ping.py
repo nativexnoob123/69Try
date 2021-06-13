@@ -3,7 +3,7 @@ from datetime import datetime
 import time
 import asyncio
 from asyncio import Queue, QueueEmpty as Empty, QueueEmpty
-from typing import Dict, Union
+from typing import Dict, Union, List
 from pyrogram import filters, Client
 from mystic.modules.start import get_readable_time
 __MODULE__ = "Ping"
