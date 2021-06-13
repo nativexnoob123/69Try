@@ -78,7 +78,7 @@ async def save_user_afk(chat_id: int, name: str, note: dict):
     )
 
 
-async def delete_note(chat_id: int, name: str) -> bool:
+async def delete_afk_user(chat_id: int, name: str) -> bool:
     notesd = await _get_notes(chat_id)
     name = "Hello"
     if name in notesd:
@@ -109,9 +109,14 @@ async def afk_check(_, message):
             finaltime = int(time.time() - timeafk)
             seenago =  f"{get_readable_time((finaltime))}"
             reasonafk = _note["data"]
+            user = _note["user"]
+            if int(user) == int(message.reply_to_message.from_user.id):
+                await delete_afk_user(message.reply_to_message.from_user.id, name)
+                if reasonafk != "None":
+                    await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is back online__**\n\n__Was AFK For:__ {seenago} ago\n__Reason:__ {reasonafk}", disable_web_page_preview=True)
             if _note["type"] == "text":
-                if reason != "None":
-                    await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago\n__Reason;__ {reasonafk}", disable_web_page_preview=True)
+                if reasonafk != "None":
+                    await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago\n__Reason:__ {reasonafk}", disable_web_page_preview=True)
                 else:
                     await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago", disable_web_page_preview=True)                             
             elif _note["type"] == "animation":
@@ -120,7 +125,7 @@ async def afk_check(_, message):
                     await message.reply_animation(_note["data"], caption = f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago")
                     disable_web_page_preview=True
                 else:
-                    await message.reply_animation(_note["data"], caption = f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago\n__Reason;__ {reasongif}")
+                    await message.reply_animation(_note["data"], caption = f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago\n__Reason:__ {reasongif}")
                     disable_web_page_preview=True
             else:
                 reasonsticker = _note["reason"]
@@ -129,7 +134,7 @@ async def afk_check(_, message):
                     await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago", disable_web_page_preview=True)
                 else:
                     await message.reply_sticker(_note["data"])
-                    await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago\n__Reason;__ {reasonsticker}", disable_web_page_preview=True)
+                    await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago\n__Reason:__ {reasonsticker}", disable_web_page_preview=True)
                     
 
 
@@ -175,7 +180,8 @@ async def afk_check(_, message):
 @app.on_message(filters.command("afk"))
 async def afk(_, message):
     _time = time.time() 
-    name = message.from_user.id
+    name = "Hello"
+    _user = message.from_user.id
     from_user_mention = message.from_user.mention
     if len(message.command) == 1 and not message.reply_to_message:
         print("None Pasted No reply")
@@ -185,6 +191,7 @@ async def afk(_, message):
             "type": _type,
             "time": _time,
             "data": _data,
+            "user": _user,
         }
         await save_user_afk(message.from_user.id, name, note)
         await message.reply_text(f"{from_user_mention} is now afk!")  
@@ -197,6 +204,7 @@ async def afk(_, message):
             "type": _type,
             "time": _time,
             "data": _data,
+            "user": _user,
         }
         await save_user_afk(message.from_user.id, name, note)
         await message.reply_text(f"{from_user_mention} is now afk!")  
@@ -215,6 +223,7 @@ async def afk(_, message):
                         "time": _time,
                         "data": _data,
                         "reason": _reason,
+                        "user": _user,
                     }
                 if len(message.command) > 1:
                     _reason = message.text.split(None, 1)[1].strip()
@@ -223,6 +232,7 @@ async def afk(_, message):
                         "time": _time,
                         "data": _data,
                         "reason": _reason,
+                        "user": _user,
                     }
                 await save_user_afk(message.from_user.id, name, note)
                 await message.reply_text(f"{from_user_mention} is now afk!")  
@@ -238,6 +248,7 @@ async def afk(_, message):
                         "time": _time,
                         "data": _data,
                         "reason": _reason,
+                        "user": _user,
                     }
                 if len(message.command) > 1:
                     _reason = message.text.split(None, 1)[1].strip()
@@ -246,6 +257,7 @@ async def afk(_, message):
                         "time": _time,
                         "data": _data,
                         "reason": _reason,
+                        "user": _user,
                     }   
                 await save_user_afk(message.from_user.id, name, note)
                 await message.reply_text(f"{from_user_mention} is now afk!")  
@@ -259,6 +271,7 @@ async def afk(_, message):
                     "type": _type,
                     "time": _time,
                     "data": _data,
+                    "user": _user,
                  }
                 await save_user_afk(message.from_user.id, name, note)
                 await message.reply_text(f"{from_user_mention} is now afk!")  
@@ -271,6 +284,7 @@ async def afk(_, message):
                     "type": _type,
                     "time": _time,
                     "data": _data,
+                    "user": _user,
                 }
                 await save_user_afk(message.from_user.id, name, note)
                 await message.reply_text(f"{from_user_mention} is now afk!")  
