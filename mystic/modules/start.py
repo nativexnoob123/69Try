@@ -12,20 +12,20 @@ __HELP__ = "•Anime uwu•\n\n/anime - search anime on AniList\n /manga - searc
 
 
 
-async def is_sudo_user(user_id: int) -> bool:
+async def is_banned_user(user_id: int) -> bool:
     user = await decdb.find_one({"user_id": user_id})
     if not user:
         return False
     return True
   
 async def add_gban_user(user_id: int):
-    is_gbanned = await is_sudo_user(user_id)
+    is_gbanned = await is_banned_user(user_id)
     if is_gbanned:
         return
     return await decdb.insert_one({"user_id": user_id})
   
 async def remove_gban_user(user_id: int):
-    is_gbanned = await is_sudo_user(user_id)
+    is_gbanned = await is_banned_user(user_id)
     if not is_gbanned:
         return
     return await decdb.delete_one({"user_id": user_id})  
@@ -177,7 +177,11 @@ async def start(_, message):
 @app.on_message(filters.command("play"))
 async def start(_, message):
     user_id = message.from_user.id
-    
+    if await is_banned_user(message.from_user.id):
+        pass
+    else:
+        await message.reply_text(f"You have been banned from Yukki due to Spam Activities.\n\n**Ban Unlocks In:** 3 Mins") 
+        return
     file_path = time.time()
     if is_emptyft(message.from_user.id):
         await putft(message.from_user.id, file_path=file_path)
