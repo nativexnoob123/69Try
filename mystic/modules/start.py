@@ -12,25 +12,25 @@ __HELP__ = "•Anime uwu•\n\n/anime - search anime on AniList\n /manga - searc
 
 
 
-async def is_dec_on(user_id: int) -> bool:
-    chat = await decdb.find_one({"chat_id_toggle": user_id})
+async def is_dec_on(chat_id: int) -> bool:
+    chat = await decdb.find_one({"chat_id_toggle": chat_id})
     if not chat:
         return True
     return False
 
 
-async def dec_on(user_id: int):
-    is_karma = await is_dec_on(user_id)
+async def dec_on(chat_id: int):
+    is_karma = await is_dec_on(chat_id)
     if is_karma:
         return
-    return await decdb.delete_one({"chat_id_toggle": user_id})
+    return await decdb.delete_one({"chat_id_toggle": chat_id})
 
 
-async def dec_off(user_id: int):
-    is_karma = await is_dec_on(user_id)
+async def dec_off(chat_id: int):
+    is_karma = await is_dec_on(chat_id)
     if not is_karma:
         return
-    return await decdb.insert_one({"chat_id_toggle": user_id})
+    return await decdb.insert_one({"chat_id_toggle": chat_id})
 
 
 
@@ -179,7 +179,7 @@ async def start(_, message):
 @app.on_message(filters.command("play"))
 async def start(_, message):
     user_id = message.from_user.id
-    if await is_dec_on(user_id):
+    if await is_dec_on(message.chat.id):
         await message.reply_text(f"You have been banned from Yukki due to Spam Activities.\n\n**Ban Unlocks In:** {que} seconds") 
         return
     file_path = time.time()
