@@ -100,10 +100,10 @@ async def afk_check(_, message):
     if a == 1:
         _note = await get_note(message.from_user.id, name)
         if not _note:
-            print("None Found")
+            print("None Found reply")
             pass
         else:
-            print("Found")
+            print("Found direct")
             timeafk = _note["time"]
             print(timeafk)
             finaltime = int(time.time() - timeafk)
@@ -141,10 +141,10 @@ async def afk_check(_, message):
         print("Reply")
         _note = await get_note(message.reply_to_message.from_user.id, name)
         if not _note:
-            print("None Found")
+            print("None Found reply")
             pass
         else:
-            print("Found")
+            print("Found reply")
             timeafk = _note["time"]
             print(timeafk)
             finaltime = int(time.time() - timeafk)
