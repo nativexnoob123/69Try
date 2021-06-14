@@ -148,6 +148,7 @@ async def afk_check(_, message):
     if "@" in input:
         print("@ input")
         input = message.text.lower().strip()
+        print(input)
         _notes = await get_note_names(200)
         if not _notes:
             return
