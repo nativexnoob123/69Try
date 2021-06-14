@@ -83,7 +83,7 @@ async def get_note_names(chat_id: int) -> List[str]:
 
 
 async def get_note(chat_id: int, name: str) -> Union[bool, dict]:
-    name = "Hello"
+    name = name.lower().strip()
     _notes = await _get_notes(chat_id)
     if name in _notes:
         return _notes[name]
@@ -92,7 +92,7 @@ async def get_note(chat_id: int, name: str) -> Union[bool, dict]:
 
 
 async def save_user_afk(chat_id: int, name: str, note: dict):
-    name ="Hello"
+    name = name.lower().strip()
     _notes = await _get_notes(chat_id)
     _notes[name] = note
     await notesdb.update_one(
@@ -102,7 +102,7 @@ async def save_user_afk(chat_id: int, name: str, note: dict):
     
 async def delete_afk_user(chat_id: int, name: str) -> bool:
     notesd = await _get_notes(chat_id)
-    name = "Hello"
+    name = name.lower().strip()
     if name in notesd:
         del notesd[name]
         await notesdb.update_one(
