@@ -167,7 +167,7 @@ async def afk_check(_, message):
         for word in afkusers:
             pattern = r"( |^|[^\w])" + re.escape(word) + r"( |$|[^\w])"
             if re.search(pattern, input, flags=re.IGNORECASE):
-                x = re.escape(word)
+                z = re.escape(word)
                 abc = []
                 abc.append(z)
                 for u in abc:
