@@ -156,7 +156,10 @@ async def afk_check(_, message):
     user_id = message.from_user.id
     a = 1
     name = "Hello"
-    input = message.text
+    if message.text:    
+        input = message.text
+    else:
+        input = "None"
     if "@" in input:
         print("@ input")
         input = message.text.lower().strip()
