@@ -151,15 +151,18 @@ async def afk_check(_, message):
             pattern = r"( |^|[^\w])" + re.escape(word) + r"( |$|[^\w])"
             if re.search(pattern, input, flags=re.IGNORECASE):
                 x = re.escape(word)
-                print(x)
-                user = await app.get_users(x)
-                _note = await get_note(user.id, name)
+                abc = []
+                abc.append(z)
+                for u in abc:
+                    H = await app.get_users(u)
+                    abc.pop(0)
+                _note = await get_note(H.id, name)
                 if not _note:
                     print("None Found reply")
                 pass
             else:
-                if await is_afk_user(message.from_user.id):
-                    await remove_afk_user(user_id)  
+                if await is_afk_user(H.id):
+                    await remove_afk_user(H.id)  
                     return
                 print("Found @ user")
                 timeafk = _note["time"]
@@ -169,13 +172,13 @@ async def afk_check(_, message):
                 reasonafk = _note["data"]
                 user = _note["user"]
                 if int(user) == int(message.from_user.id):
-                    await delete_afk_user(message.from_user.id, name)
+                    await delete_afk_user(H.id, name)
                 if _note["type"] == "text":
                     if reasonafk != "None":
-                        await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago\n__Reason:__ {reasonafk}", disable_web_page_preview=True)
+                        await message.reply_text(f"**__{H.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago\n__Reason:__ {reasonafk}", disable_web_page_preview=True)
                         return
                     else:
-                        await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago", disable_web_page_preview=True)   
+                        await message.reply_text(f"**__{H.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago", disable_web_page_preview=True)   
                         return
                 elif _note["type"] == "animation":
                     reasongif = _note["reason"]
@@ -360,6 +363,7 @@ async def afk(_, message):
     _user = message.from_user.id
     from_user_mention = message.from_user.mention
     await add_afk_user(_user)
+    await save_blacklist_filter(200, _user)
     if len(message.command) == 1 and not message.reply_to_message:
         print("None Pasted No reply")
         _type = "text"
