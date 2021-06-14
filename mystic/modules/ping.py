@@ -156,7 +156,9 @@ async def afk_check(_, message):
             for note in _notes:
                 msg += f" '{note}',"
         afkusers = f"[{msg}]"
+        print(afkusers)
         for word in afkusers:
+            print(word)
             print("I am Here")
             pattern = r"( |^|[^\w])" + re.escape(word) + r"( |$|[^\w])"
             if re.search(pattern, input, flags=re.IGNORECASE):
