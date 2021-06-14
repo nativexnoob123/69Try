@@ -379,17 +379,17 @@ async def del_filter(_, message):
 @app.on_message(filters.command("afk"))
 async def afk(_, message):
     _time = time.time() 
-    name = "Hello"
     _user = message.from_user.id
     from_user_mention = message.from_user.mention
     if message.from_user.username:
-        namee = message.from_user.username
+        name = message.from_user.username
         note = {
             "name": name,
             "user": _user,
         }
-        await save_user_afk(200, namee, note)
+        await save_user_afk(200, name, note)
     await add_afk_user(_user)
+    name = "Hello"
     if len(message.command) == 1 and not message.reply_to_message:
         print("None Pasted No reply")
         _type = "text"
