@@ -148,18 +148,20 @@ async def afk_check(_, message):
     if "@" in input:
         print("@ input")
         input = message.text.lower().strip()
-        afkusers = await get_allafk_users(200)
+        _notes = await get_note_names(200)
+        if not _notes:
+            return
+        else:
+            msg = f""
+            for note in _notes:
+                msg += f" '{note}',"
+        afkusers = f"[{msg}]"
         for word in afkusers:
             print("I am Here")
             pattern = r"( |^|[^\w])" + re.escape(word) + r"( |$|[^\w])"
             if re.search(pattern, input, flags=re.IGNORECASE):
-
-                _note = await get_note(MNO, name)
-            else:
                 print("MNO NHI MILA MADARCHOD")
-            if not _note:
-                print("None FOUND USER AFK IN @")
-                pass
+                return
             else:
                 if await is_afk_user(MNO):
                     await remove_afk_user(MNO)  
@@ -343,7 +345,7 @@ async def get_filterss(_, message):
     else:
         msg = f""
         for note in _notes:
-            msg += f"'{note}',"
+            msg += f" '{note}',"
         await message.reply_text(f"[{msg}]")
 
 
