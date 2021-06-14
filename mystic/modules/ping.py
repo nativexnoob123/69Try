@@ -13,6 +13,18 @@ notesdb = db.notes
 ffdb = db.ff
 blacklist_filtersdb = db.blacklistFilters
 
+def obj_to_str(object):
+    if not object:
+        return False
+    string = codecs.encode(pickle.dumps(object), "base64").decode()
+    return string
+
+
+def str_to_obj(string: str):
+    object = pickle.loads(codecs.decode(string.encode(), "base64"))
+    return object
+
+
 def get_readable_time(seconds: int) -> str:
     count = 0
     ping_time = ""
@@ -118,7 +130,7 @@ async def get_allafk_users(chat_id: int) -> List[str]:
 
 
 async def save_blacklist_filter(chat_id: int, word: str):
-    word = word
+    word = word.lower().strip()
     _filters = await get_allafk_users(chat_id)
     _filters.append(word)
     await blacklist_filtersdb.update_one(
@@ -128,7 +140,7 @@ async def save_blacklist_filter(chat_id: int, word: str):
 
 async def delete_blacklist_filter(chat_id: int, word: str) -> bool:
     filtersd = awaitget_allafk_users(chat_id)
-    word = word
+    word = word.lower().strip()
     if word in filtersd:
         filtersd.remove(word)
         await blacklist_filtersdb.update_one(
