@@ -149,21 +149,12 @@ async def afk_check(_, message):
         print("@ input")
         input = message.text.lower().strip()
         print(input)
-        _notes = await get_note_names(200)
-        if not _notes:
-            return
-        else:
-            msg = f""
-            for note in _notes:
-                msg += f" {note}"
-        afkusers = []
-        afkusers.append(msg)
+        afkusers = await get_allafk_users(200)
         for word in afkusers:
-            print(word)
             print("I am Here")
             pattern = r"( |^|[^\w])" + re.escape(word) + r"( |$|[^\w])"
             if re.search(pattern, input, flags=re.IGNORECASE):
-                print("MNO NHI MILA MADARCHOD")
+                print(word)
                 return
             else:
                 return
@@ -394,6 +385,11 @@ async def afk(_, message):
             "user": _user,
         }
         await save_user_afk(200, name, note)
+        deleted = await delete_blacklist_filter(200, name)
+        if deleted:
+            await save_blacklist_filter(200, name)
+        else:
+            await save_blacklist_filter(200, name)
     await add_afk_user(_user)
     name = "Hello"
     if len(message.command) == 1 and not message.reply_to_message:
