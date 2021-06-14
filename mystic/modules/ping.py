@@ -344,7 +344,7 @@ async def get_filterss(_, message):
         msg = f""
         for note in _notes:
             msg += f"'{note}',"
-        await message.reply_text(f"[{msg}])
+        await message.reply_text(f"[{msg}]")
 
 
 @app.on_message(
