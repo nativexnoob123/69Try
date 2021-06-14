@@ -184,6 +184,7 @@ async def afk_check(_, message):
                     if int(user) == int(message.from_user.id):
                         await delete_afk_user(H.id, name)
                         await delete_afk_user(200, word)
+                        await delete_blacklist_filter(200, word)
                         if _note["type"] == "text":
                             if reasonafk != "None":
                                 await message.reply_text(f"**__{firstname} is back online__**\n\n__Was AFK For:__ {seenago}\n__Reason:__ {reasonafk}", disable_web_page_preview=True)
