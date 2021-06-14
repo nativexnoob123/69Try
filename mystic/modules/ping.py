@@ -112,49 +112,6 @@ async def delete_afk_user(chat_id: int, name: str) -> bool:
     return False
 
 
-async def _get_notes_(chat_id: int) -> Dict[str, int]:
-    _notes = await blackdb.find_one({"chat_id": chat_id})
-    if not _notes:
-        return {}
-    return _notes["notes"]
-
-
-async def get_note_names_(chat_id: int) -> List[str]:
-    _notes = []
-    for note in await _get_notes_(chat_id):
-        _notes.append(note)
-    return _notes
-
-
-async def get_afk(chat_id: int, name: str) -> Union[bool, dict]:
-    name = "Hello"
-    _notes = await _get_notes_(chat_id)
-    if name in _notes:
-        return _notes[name]
-    else:
-        return False
-
-
-async def save_afk(chat_id: int, name: str, note: dict):
-    name ="Hello"
-    _notes = await _get_notes_(chat_id)
-    _notes[name] = note
-    await blackdb.update_one(
-        {"chat_id": chat_id}, {"$set": {"notes": _notes}}, upsert=True
-    )
-
-    
-async def delete_aff(chat_id: int, name: str) -> bool:
-    notesd = await _get_notes_(chat_id)
-    name = "Hello"
-    if name in notesd:
-        del notesd[name]
-        await blackdb.update_one(
-            {"chat_id": chat_id}, {"$set": {"notes": notesd}}, upsert=True
-        )
-        return True
-    return False
-
 chat_watcher_group = 5  
 @app.on_message(group=chat_watcher_group)
 async def afk_check(_, message):
@@ -361,7 +318,7 @@ async def afk_check(_, message):
     filters.command("afkusers") & ~filters.edited & ~filters.private
 )
 async def get_filterss(_, message):
-    _notes = await get_note_names_(200)
+    _notes = await get_note_names(200)
     if not _notes:
         await message.reply_text("**No AFK**")
     else:
@@ -412,7 +369,7 @@ async def afk(_, message):
             "name": name,
             "user": _user,
         }
-        await save_afk(200, name, note)
+        await save_user_afk(200, name, note)
     await add_afk_user(_user)
     if len(message.command) == 1 and not message.reply_to_message:
         print("None Pasted No reply")
