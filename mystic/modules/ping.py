@@ -11,7 +11,7 @@ __HELP__ = "Pong."
 
 notesdb = db.notes
 ffdb = db.ff
-blacklist_filtersdb = db.blacklistFilters
+blackdb = db.black
 
 def obj_to_str(object):
     if not object:
@@ -123,7 +123,7 @@ async def delete_afk_user(chat_id: int, name: str) -> bool:
     return False
 
 async def get_allafk_users(chat_id: int) -> List[str]:
-    _filters = await blacklist_filtersdb.find_one({"chat_id": chat_id})
+    _filters = await blackdb.find_one({"chat_id": chat_id})
     if not _filters:
         return []
     return _filters["filters"]
@@ -133,7 +133,7 @@ async def save_blacklist_filter(chat_id: int, word: str):
     word = word.lower().strip()
     _filters = await get_allafk_users(chat_id)
     _filters.append(word)
-    await blacklist_filtersdb.update_one(
+    await blackdb.update_one(
         {"chat_id": chat_id}, {"$set": {"filters": _filters}}, upsert=True
     )
 
@@ -143,7 +143,7 @@ async def delete_blacklist_filter(chat_id: int, word: str) -> bool:
     word = word
     if word in filtersd:
         filtersd.remove(word)
-        await blacklist_filtersdb.update_one(
+        await blackdb.update_one(
             {"chat_id": chat_id}, {"$set": {"filters": filtersd}}, upsert=True
         )
         return True
