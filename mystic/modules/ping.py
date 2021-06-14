@@ -165,6 +165,7 @@ async def afk_check(_, message):
                 print("MNO NHI MILA MADARCHOD")
                 return
             else:
+                return
                 if await is_afk_user(MNO):
                     await remove_afk_user(MNO)  
                     return
