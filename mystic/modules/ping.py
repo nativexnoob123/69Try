@@ -346,10 +346,33 @@ async def afk_check(_, message):
 
 
 
+@app.on_message(
+    filters.command("afkusers") & ~filters.edited & ~filters.private
+)
+@capture_err
+async def get_filterss(_, message):
+    data = awaitget_allafk_users(200)
+    if not data:
+        await message.reply_text("**No**")
+    else:
+        msg = f"List:\n"
+        for word in data:
+            msg += f"**-** `{word}`\n"
+        await message.reply_text(msg)
 
 
 
-
+@app.on_message(
+    filters.command("del") & ~filters.edited & ~filters.private
+)
+@adminsOnly("can_restrict_members")
+async def del_filter(_, message):
+    word = message.text.split(None, 1)[1].strip()
+    chat_id = message.chat.id
+    deleted = await delete_blacklist_filter(200, word)
+    if deleted:
+        return await message.reply_text(f"**done {word}.**")
+    await message.reply_text("**No**")
 
 
 
