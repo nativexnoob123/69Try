@@ -196,7 +196,7 @@ async def afk_check(_, message):
                         await message.reply_sticker(_note["data"])
                         await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago", disable_web_page_preview=True)
                         return
-                else:
+                    else:
                         await message.reply_sticker(_note["data"])
                         await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago\n__Reason:__ {reasonsticker}", disable_web_page_preview=True)
                         return
