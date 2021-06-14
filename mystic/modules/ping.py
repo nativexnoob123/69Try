@@ -170,12 +170,13 @@ async def afk_check(_, message):
             if re.search(pattern, input, flags=re.IGNORECASE):
                 getuser = await app.get_users(word)
                 MNO = getuser.id
-                if MNO:
-                    _note = await get_note(MNO, name)
-                else:
-                    print("MNO NHI MILA MADARCHOD")
-                if not _note:
-                    print("None Found reply")
+            if MNO:
+                print(MNO)
+                _note = await get_note(MNO, name)
+            else:
+                print("MNO NHI MILA MADARCHOD")
+            if not _note:
+                print("None FOUND USER AFK IN @")
                 pass
             else:
                 if await is_afk_user(H.id):
