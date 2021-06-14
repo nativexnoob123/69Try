@@ -66,17 +66,6 @@ async def remove_afk_user(user_id: int):
         return
     return await ffdb.delete_one({"user_id": user_id})  
 
-async def get_notes_count() -> dict:
-    chats = notesdb.find({"chat_id": {"$lt": 0}})
-    if not chats:
-        return {}
-    chats_count = 0
-    notes_count = 0
-    for chat in await chats.to_list(length=1000000000):
-        notes_name = await get_note_names(chat["chat_id"])
-        notes_count += len(notes_name)
-        chats_count += 1
-    return {"chats_count": chats_count, "notes_count": notes_count}
 
 
 async def _get_notes(chat_id: int) -> Dict[str, int]:
@@ -110,7 +99,7 @@ async def save_user_afk(chat_id: int, name: str, note: dict):
         {"chat_id": chat_id}, {"$set": {"notes": _notes}}, upsert=True
     )
 
-
+    
 async def delete_afk_user(chat_id: int, name: str) -> bool:
     notesd = await _get_notes(chat_id)
     name = "Hello"
@@ -122,33 +111,49 @@ async def delete_afk_user(chat_id: int, name: str) -> bool:
         return True
     return False
 
-async def get_allafk_users(chat_id: int) -> List[str]:
-    _filters = await blackdb.find_one({"chat_id": chat_id})
-    if not _filters:
-        return []
-    return _filters["filters"]
+
+async def _get_notes_(chat_id: int) -> Dict[str, int]:
+    _notes = await blackdb.find_one({"chat_id": chat_id})
+    if not _notes:
+        return {}
+    return _notes["notes"]
 
 
-async def save_blacklist_filter(chat_id: int, word: str):
-    word = word.lower().strip()
-    _filters = await get_allafk_users(chat_id)
-    _filters.append(word)
+async def get_note_names_(chat_id: int) -> List[str]:
+    _notes = []
+    for note in await _get_notes_(chat_id):
+        _notes.append(note)
+    return _notes
+
+
+async def get_afk(chat_id: int, name: str) -> Union[bool, dict]:
+    name = "Hello"
+    _notes = await _get_notes_(chat_id)
+    if name in _notes:
+        return _notes[name]
+    else:
+        return False
+
+
+async def save_afk(chat_id: int, name: str, note: dict):
+    name ="Hello"
+    _notes = await _get_notes_(chat_id)
+    _notes[name] = note
     await blackdb.update_one(
-        {"chat_id": chat_id}, {"$set": {"filters": _filters}}, upsert=True
+        {"chat_id": chat_id}, {"$set": {"notes": _notes}}, upsert=True
     )
 
-
-async def delete_blacklist_filter(chat_id: int, word: str) -> bool:
-    filtersd = await get_allafk_users(chat_id)
-    word = word
-    if word in filtersd:
-        filtersd.remove(word)
+    
+async def delete_aff(chat_id: int, name: str) -> bool:
+    notesd = await _get_notes_(chat_id)
+    name = "Hello"
+    if name in notesd:
+        del notesd[name]
         await blackdb.update_one(
-            {"chat_id": chat_id}, {"$set": {"filters": filtersd}}, upsert=True
+            {"chat_id": chat_id}, {"$set": {"notes": notesd}}, upsert=True
         )
         return True
     return False
-
 
 chat_watcher_group = 5  
 @app.on_message(group=chat_watcher_group)
@@ -163,7 +168,7 @@ async def afk_check(_, message):
     if "@" in input:
         print("@ input")
         input = message.text.lower().strip()
-        afkusers = await get_allafk_users(200)
+        afkusers = message.command
         for word in afkusers:
             print("I am Here")
             pattern = r"( |^|[^\w])" + re.escape(word) + r"( |$|[^\w])"
@@ -356,15 +361,14 @@ async def afk_check(_, message):
     filters.command("afkusers") & ~filters.edited & ~filters.private
 )
 async def get_filterss(_, message):
-    data = await get_allafk_users(200)
-    if not data:
-        await message.reply_text("**No**")
+    _notes = await get_note_names_(200)
+    if not _notes:
+        await message.reply_text("**No AFK**")
     else:
-        msg = f"List:\n"
-        for word in data:
-            msg += f"**-** `{word}`\n"
+        msg = f"AFK\n"
+        for note in _notes:
+            msg += f"**-** `{note}`\n"
         await message.reply_text(msg)
-
 
 
 @app.on_message(
@@ -402,9 +406,14 @@ async def afk(_, message):
     name = "Hello"
     _user = message.from_user.id
     from_user_mention = message.from_user.mention
-    word = message.from_user.username
+    if message.from_user.username:
+        name = message.from_user.username
+        note = {
+            "name": name,
+            "user": _user,
+        }
+        await save_afk(200, name, note)
     await add_afk_user(_user)
-    await save_blacklist_filter(200, word)
     if len(message.command) == 1 and not message.reply_to_message:
         print("None Pasted No reply")
         _type = "text"
