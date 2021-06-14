@@ -147,7 +147,7 @@ async def afk_check(_, message):
     if "@" in input:
         print("@ input")
         afkusers = await get_allafk_users(200)
-        for word in afkuser:
+        for word in afkusers:
             pattern = r"( |^|[^\w])" + re.escape(word) + r"( |$|[^\w])"
             if re.search(pattern, input, flags=re.IGNORECASE):
                 x = re.escape(word)
