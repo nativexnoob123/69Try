@@ -117,7 +117,7 @@ async def get_allafk_users(chat_id: int) -> List[str]:
 
 
 async def save_blacklist_filter(chat_id: int, word: str):
-    word = word.lower().strip()
+    word = word
     _filters = await get_allafk_users(chat_id)
     _filters.append(word)
     await blacklist_filtersdb.update_one(
@@ -127,7 +127,7 @@ async def save_blacklist_filter(chat_id: int, word: str):
 
 async def delete_blacklist_filter(chat_id: int, word: str) -> bool:
     filtersd = awaitget_allafk_users(chat_id)
-    word = word.lower().strip()
+    word = word
     if word in filtersd:
         filtersd.remove(word)
         await blacklist_filtersdb.update_one(
