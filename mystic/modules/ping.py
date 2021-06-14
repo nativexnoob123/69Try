@@ -173,7 +173,7 @@ async def afk_check(_, message):
                 if MNO:
                     _note = await get_note(MNO, name)
                 else:
-                    print"MNO NHI MILA MADARCHOD")
+                    print("MNO NHI MILA MADARCHOD")
                 if not _note:
                     print("None Found reply")
                 pass
