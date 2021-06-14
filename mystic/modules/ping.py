@@ -111,6 +111,29 @@ async def delete_afk_user(chat_id: int, name: str) -> bool:
         return True
     return False
 
+async def get_allafk_users(chat_id: int) -> List[str]:
+    _filters = await blackdb.find_one({"chat_id": chat_id})
+    if not _filters:
+        return []
+    return _filters["filters"]
+
+async def save_blacklist_filter(chat_id: int, word: str):
+    word = word.lower().strip()
+    _filters = await get_allafk_users(chat_id)
+    _filters.append(word)
+    await blackdb.update_one(
+        {"chat_id": chat_id}, {"$set": {"filters": _filters}}, upsert=True
+    )
+async def delete_blacklist_filter(chat_id: int, word: str) -> bool:
+    filtersd = await get_allafk_users(chat_id)
+    word = word
+    if word in filtersd:
+        filtersd.remove(word)
+        await blackdb.update_one(
+            {"chat_id": chat_id}, {"$set": {"filters": filtersd}}, upsert=True
+        )
+        return True
+    return False
 
 chat_watcher_group = 5  
 @app.on_message(group=chat_watcher_group)
@@ -125,16 +148,12 @@ async def afk_check(_, message):
     if "@" in input:
         print("@ input")
         input = message.text.lower().strip()
-        afkusers = message.command
+        afkusers = await get_allafk_users(200)
         for word in afkusers:
             print("I am Here")
             pattern = r"( |^|[^\w])" + re.escape(word) + r"( |$|[^\w])"
             if re.search(pattern, input, flags=re.IGNORECASE):
-                getuser = await app.get_users(word)
-                MNO = getuser.id
-                MN = getuser.first_name
-            if MNO:
-                print(MNO)
+
                 _note = await get_note(MNO, name)
             else:
                 print("MNO NHI MILA MADARCHOD")
@@ -364,12 +383,12 @@ async def afk(_, message):
     _user = message.from_user.id
     from_user_mention = message.from_user.mention
     if message.from_user.username:
-        name = message.from_user.username
+        namee = message.from_user.username
         note = {
             "name": name,
             "user": _user,
         }
-        await save_user_afk(200, name, note)
+        await save_user_afk(200, namee, note)
     await add_afk_user(_user)
     if len(message.command) == 1 and not message.reply_to_message:
         print("None Pasted No reply")
