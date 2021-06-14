@@ -156,9 +156,10 @@ async def afk_check(_, message):
     user_id = message.from_user.id
     a = 1
     name = "Hello"
-    input = message.text.lower().strip()
+    input = message.text
     if "@" in input:
         print("@ input")
+        input = message.text.lower().strip()
         afkusers = await get_allafk_users(200)
         for word in afkusers:
             pattern = r"( |^|[^\w])" + re.escape(word) + r"( |$|[^\w])"
