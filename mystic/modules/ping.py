@@ -349,7 +349,6 @@ async def afk_check(_, message):
 @app.on_message(
     filters.command("afkusers") & ~filters.edited & ~filters.private
 )
-@capture_err
 async def get_filterss(_, message):
     data = awaitget_allafk_users(200)
     if not data:
@@ -365,7 +364,6 @@ async def get_filterss(_, message):
 @app.on_message(
     filters.command("del") & ~filters.edited & ~filters.private
 )
-@adminsOnly("can_restrict_members")
 async def del_filter(_, message):
     word = message.text.split(None, 1)[1].strip()
     chat_id = message.chat.id
