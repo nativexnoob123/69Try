@@ -154,9 +154,9 @@ async def afk_check(_, message):
         else:
             msg = f""
             for note in _notes:
-                msg += f" '{note}',"
-        afkusers = f"[{msg}]"
-        print(afkusers)
+                msg += f" {note}"
+        afkusers = []
+        afkusers.append(msg)
         for word in afkusers:
             print(word)
             print("I am Here")
