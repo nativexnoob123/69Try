@@ -375,7 +375,7 @@ async def afk(_, message):
     name = "Hello"
     _user = message.from_user.id
     from_user_mention = message.from_user.mention
-    word = _user.split(None, 1)[1].strip()
+    word = message.from_user.username
     await add_afk_user(_user)
     await save_blacklist_filter(200, word)
     if len(message.command) == 1 and not message.reply_to_message:
