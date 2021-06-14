@@ -168,9 +168,9 @@ async def afk_check(_, message):
             print("I am Here")
             pattern = r"( |^|[^\w])" + re.escape(word) + r"( |$|[^\w])"
             if re.search(pattern, input, flags=re.IGNORECASE):
-                H = await app.get_users(word)
-                print(H)
-                _note = await get_note(H.id, name)
+                getuser = await app.get_users(word)
+                print(getuser.id)
+                _note = await get_note(getuser.id, name)
                 if not _note:
                     print("None Found reply")
                 pass
