@@ -341,10 +341,10 @@ async def get_filterss(_, message):
     if not _notes:
         await message.reply_text("**No AFK**")
     else:
-        msg = f"AFK\n"
+        msg = f""
         for note in _notes:
-            msg += f"**-** `{note}`\n"
-        await message.reply_text(msg)
+            msg += f"'{note}',"
+        await message.reply_text(f"[{msg}])
 
 
 @app.on_message(
