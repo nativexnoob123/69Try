@@ -10,6 +10,8 @@ __HELP__ = "Pong."
 
 notesdb = db.notes
 ffdb = db.ff
+blacklist_filtersdb = db.blacklistFilters
+
 def get_readable_time(seconds: int) -> str:
     count = 0
     ping_time = ""
@@ -79,7 +81,7 @@ async def get_note_names(chat_id: int) -> List[str]:
 
 
 async def get_note(chat_id: int, name: str) -> Union[bool, dict]:
-    name = "Hello"
+    name = name.lower().strip()
     _notes = await _get_notes(chat_id)
     if name in _notes:
         return _notes[name]
@@ -88,7 +90,7 @@ async def get_note(chat_id: int, name: str) -> Union[bool, dict]:
 
 
 async def save_user_afk(chat_id: int, name: str, note: dict):
-    name = "Hello"
+    name = name.lower().strip()
     _notes = await _get_notes(chat_id)
     _notes[name] = note
     await notesdb.update_one(
@@ -98,7 +100,7 @@ async def save_user_afk(chat_id: int, name: str, note: dict):
 
 async def delete_afk_user(chat_id: int, name: str) -> bool:
     notesd = await _get_notes(chat_id)
-    name = "Hello"
+    name = name.lower().strip()
     if name in notesd:
         del notesd[name]
         await notesdb.update_one(
@@ -107,14 +109,96 @@ async def delete_afk_user(chat_id: int, name: str) -> bool:
         return True
     return False
 
+async def get_allafk_users(chat_id: int) -> List[str]:
+    _filters = await blacklist_filtersdb.find_one({"chat_id": chat_id})
+    if not _filters:
+        return []
+    return _filters["filters"]
+
+
+async def save_blacklist_filter(chat_id: int, word: str):
+    word = word.lower().strip()
+    _filters = await get_allafk_users(chat_id)
+    _filters.append(word)
+    await blacklist_filtersdb.update_one(
+        {"chat_id": chat_id}, {"$set": {"filters": _filters}}, upsert=True
+    )
+
+
+async def delete_blacklist_filter(chat_id: int, word: str) -> bool:
+    filtersd = awaitget_allafk_users(chat_id)
+    word = word.lower().strip()
+    if word in filtersd:
+        filtersd.remove(word)
+        await blacklist_filtersdb.update_one(
+            {"chat_id": chat_id}, {"$set": {"filters": filtersd}}, upsert=True
+        )
+        return True
+    return False
 
 
 chat_watcher_group = 5  
 @app.on_message(group=chat_watcher_group)
 async def afk_check(_, message):
     user_id = message.from_user.id
-    name = "Hello"
     a = 1
+    name = "Hello"
+    input = message.text.lower().strip()
+    if "@" in input:
+        print("@ input")
+        afkusers = await get_allafk_users(200)
+        for word in afkuser:
+            pattern = r"( |^|[^\w])" + re.escape(word) + r"( |$|[^\w])"
+            if re.search(pattern, input, flags=re.IGNORECASE):
+                x = re.escape(word)
+                print(x)
+                user = await app.get_users(x)
+                _note = await get_note(user.id, name)
+                if not _note:
+                    print("None Found reply")
+                pass
+            else:
+                if await is_afk_user(message.from_user.id):
+                    await remove_afk_user(user_id)  
+                    return
+                print("Found @ user")
+                timeafk = _note["time"]
+                print(timeafk)
+                finaltime = int(time.time() - timeafk)
+                seenago =  f"{get_readable_time((finaltime))}"
+                reasonafk = _note["data"]
+                user = _note["user"]
+                if int(user) == int(message.from_user.id):
+                    await delete_afk_user(message.from_user.id, name)
+                if _note["type"] == "text":
+                    if reasonafk != "None":
+                        await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago\n__Reason:__ {reasonafk}", disable_web_page_preview=True)
+                        return
+                    else:
+                        await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago", disable_web_page_preview=True)   
+                        return
+                elif _note["type"] == "animation":
+                    reasongif = _note["reason"]
+                    if reasongif == "None":
+                        await message.reply_animation(_note["data"], caption = f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago")
+                        return
+                        disable_web_page_preview=True
+                    else:
+                        await message.reply_animation(_note["data"], caption = f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago\n__Reason:__ {reasongif}")
+                        return
+                        disable_web_page_preview=True
+                else:
+                    reasonsticker = _note["reason"]
+                    if reasonsticker == "None":
+                        await message.reply_sticker(_note["data"])
+                        await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago", disable_web_page_preview=True)
+                        return
+                else:
+                        await message.reply_sticker(_note["data"])
+                        await message.reply_text(f"**__{message.reply_to_message.from_user.first_name} is AFK__**\n\n__Last Seen:__ {seenago} ago\n__Reason:__ {reasonsticker}", disable_web_page_preview=True)
+                        return
+                    
+
     if a == 1:
         _note = await get_note(message.from_user.id, name)
         if not _note:
