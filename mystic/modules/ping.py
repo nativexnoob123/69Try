@@ -165,8 +165,10 @@ async def afk_check(_, message):
         input = message.text.lower().strip()
         afkusers = await get_allafk_users(200)
         for word in afkusers:
+            print("I am Here")
             pattern = r"( |^|[^\w])" + re.escape(word) + r"( |$|[^\w])"
             if re.search(pattern, input, flags=re.IGNORECASE):
+                print("Searched")
                 z = re.escape(word)
                 abc = []
                 abc.append(z)
