@@ -350,7 +350,7 @@ async def afk_check(_, message):
     filters.command("afkusers") & ~filters.edited & ~filters.private
 )
 async def get_filterss(_, message):
-    data = awaitget_allafk_users(200)
+    data = await get_allafk_users(200)
     if not data:
         await message.reply_text("**No**")
     else:
