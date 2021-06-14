@@ -140,7 +140,7 @@ async def save_blacklist_filter(chat_id: int, word: str):
 
 async def delete_blacklist_filter(chat_id: int, word: str) -> bool:
     filtersd = await get_allafk_users(chat_id)
-    word = word.lower().strip()
+    word = word
     if word in filtersd:
         filtersd.remove(word)
         await blacklist_filtersdb.update_one(
