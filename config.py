@@ -1,7 +1,7 @@
 HEROKU = False  # NOTE Make it false if you're not deploying on heroku.
 
 
-BOT_TOKEN = "1854281737:AAG4xC_oR1d4Lo2wHMUw8iODUzJn8zHc0G8"
+BOT_TOKEN = "1854281737:AAHggvj6M09cmuP0A3B3G-f1l5gp5XCyt_E"
 API_ID = 3277132
 API_HASH = "50ad2ffad01bf10049638526009661a8"
 USERBOT_PREFIX = "."
